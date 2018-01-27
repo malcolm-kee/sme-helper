@@ -10,7 +10,7 @@ const styles = theme => ({
     marginTop: 30
   },
   button: {
-    margin: theme.spacing.unit
+    marginTop: theme.spacing.unit
   },
   textField: {
     marginBottom: theme.spacing.unit
@@ -63,7 +63,13 @@ const LoginForm = ({
               }
             />
           </FormControl>
-          <Button raised color="primary" className={classes.button} type="submit">
+          <Button
+            raised
+            fullWidth
+            color="primary"
+            className={classes.button}
+            type="submit"
+          >
             Login
           </Button>
         </form>
