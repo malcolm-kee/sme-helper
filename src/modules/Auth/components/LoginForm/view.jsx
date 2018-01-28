@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import { Button, Grid, Icon, IconButton } from 'material-ui';
 import { FormControl } from 'material-ui/Form';
@@ -7,13 +8,17 @@ import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginTop: 30
+    marginTop: theme.spacing.unit * 3
   },
   button: {
     marginTop: theme.spacing.unit
   },
   textField: {
     marginBottom: theme.spacing.unit
+  },
+  hintText: {
+    ...theme.typography.body1,
+    textAlign: 'center'
   }
 });
 
@@ -72,6 +77,11 @@ const LoginForm = ({
           >
             Login
           </Button>
+          <div>
+            <p className={classes.hintText}>
+              Don't have an account? <Link to="/register">Register</Link> instead.
+            </p>
+          </div>
         </form>
       </Grid>
     </Grid>

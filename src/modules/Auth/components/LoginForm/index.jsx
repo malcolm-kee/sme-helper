@@ -25,7 +25,7 @@ class LoginFormContainer extends React.Component {
   };
 
   togglePassword = () => {
-    this.setState(prevState => this.setState({ showPassword: !prevState.showPassword }));
+    this.setState(prevState => ({ showPassword: !prevState.showPassword }));
   };
 
   render() {

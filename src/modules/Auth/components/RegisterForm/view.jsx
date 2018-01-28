@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import { Button, Grid, Icon, IconButton, Select } from 'material-ui';
 import { FormControl } from 'material-ui/Form';
@@ -14,6 +15,10 @@ const styles = theme => ({
   },
   textField: {
     marginBottom: theme.spacing.unit
+  },
+  hintText: {
+    ...theme.typography.body1,
+    textAlign: 'center'
   }
 });
 
@@ -123,6 +128,11 @@ const RegisterForm = ({
           >
             Sign Up
           </Button>
+          <div>
+            <p className={classes.hintText}>
+              Already registered? <Link to="/">Login</Link> instead.
+            </p>
+          </div>
         </form>
       </Grid>
     </Grid>
