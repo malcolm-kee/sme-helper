@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+- 6
+cache:
+  directories:
+  - node_modules
+script:
+- npm run test
+- npm run build
+branches:
+  only:
+  - master
+before_deploy: cd functions && npm install && cd -
+deploy:
+  provider: firebase
+  skip_cleanup: true
+  token:
+    secure: Fa+Eq3Qkyd5Hwcy5X/80qy1UUIJwvSgC4/TkQjgU/2C+UhAeOnlP5SDa33PdX/tTQwZA6jVLA7NJTiY8Qh+9G/Fb6nmo+nzm3dE5dFb0c+58QxRzGzumD4COoIs3k6cvM4nxVb27vw9rioafNQ7lknkTlJd74BPG4bQtRoZI3dyUPwYLIy3no+mZ6j9DsgcdP/0tucHLHJARx5tmN6qVE2dx9CBekB/h/DTevBCYEGeWBNhypEZIshCUcEWLqWYnVhlI7zt1xAgdtBB1DuanWJPLUhnGctqprPNIUcOcY+zdsY5zOPrk+jdGneGGdcd8qT5O+DuLxActvT/kvU0MtiUK6REM9hLX1QbhtqXhMwLUm3oBsGU93dsM93vTaQoHaM6/z/K46FSoLYiMPscyd8WPcnO7KYOzuYqWIqtINPyEBR9052Fx/81sepPQSpURLmv/RXszGKC4ovZ+XkpWszOmp7KeZJNySa9LY2rxk3k793lIdBHnrJmGQSQBXgRDSqNTVnWDIOxxIETjm0K6OlO0mWnHiBqF2kMgf30LfiZCHQIAUC3jcjAy5rSYc9+W5ARFX0Dlz5zZuNvP8dOfjsKRcEx7AgQYVtmZKbw1lMftZLq+D/iJoIS0ZAaYZg/N4cjSK9mYMYo+EuBbuY1zdz2ST36yDnx5Z2KmetKi7oQ=
+env:
+  global:
+  - secure: Fa+Eq3Qkyd5Hwcy5X/80qy1UUIJwvSgC4/TkQjgU/2C+UhAeOnlP5SDa33PdX/tTQwZA6jVLA7NJTiY8Qh+9G/Fb6nmo+nzm3dE5dFb0c+58QxRzGzumD4COoIs3k6cvM4nxVb27vw9rioafNQ7lknkTlJd74BPG4bQtRoZI3dyUPwYLIy3no+mZ6j9DsgcdP/0tucHLHJARx5tmN6qVE2dx9CBekB/h/DTevBCYEGeWBNhypEZIshCUcEWLqWYnVhlI7zt1xAgdtBB1DuanWJPLUhnGctqprPNIUcOcY+zdsY5zOPrk+jdGneGGdcd8qT5O+DuLxActvT/kvU0MtiUK6REM9hLX1QbhtqXhMwLUm3oBsGU93dsM93vTaQoHaM6/z/K46FSoLYiMPscyd8WPcnO7KYOzuYqWIqtINPyEBR9052Fx/81sepPQSpURLmv/RXszGKC4ovZ+XkpWszOmp7KeZJNySa9LY2rxk3k793lIdBHnrJmGQSQBXgRDSqNTVnWDIOxxIETjm0K6OlO0mWnHiBqF2kMgf30LfiZCHQIAUC3jcjAy5rSYc9+W5ARFX0Dlz5zZuNvP8dOfjsKRcEx7AgQYVtmZKbw1lMftZLq+D/iJoIS0ZAaYZg/N4cjSK9mYMYo+EuBbuY1zdz2ST36yDnx5Z2KmetKi7oQ=
