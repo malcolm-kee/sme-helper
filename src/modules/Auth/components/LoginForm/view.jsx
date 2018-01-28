@@ -2,13 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import { Button, Grid, Icon, IconButton } from 'material-ui';
-import { FormControl } from 'material-ui/Form';
+import { FormControl, FormHelperText } from 'material-ui/Form';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
+import { LinearProgress } from 'material-ui/Progress';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    marginTop: theme.spacing.unit * 3
+    flexGrow: 1
+  },
+  form: {
+    paddingTop: theme.spacing.unit * 3
   },
   button: {
     marginTop: theme.spacing.unit
@@ -30,24 +33,29 @@ const LoginForm = ({
   loginEmail,
   loginPassword,
   showPassword,
-  handleMouseDownPassword
+  handleMouseDownPassword,
+  isLoading,
+  authError
 }) => (
   <div className={classes.root}>
+    {isLoading && <LinearProgress />}
     <Grid container direction="column" justify="center" alignItems="center">
       <Grid item xs={10}>
-        <form onSubmit={onSubmit}>
-          <FormControl fullWidth>
+        <form onSubmit={onSubmit} className={classes.form}>
+          {authError && <FormHelperText error>authError</FormHelperText>}
+          <FormControl fullWidth disabled={isLoading}>
             <InputLabel htmlFor="loginEmail">Email</InputLabel>
             <Input
               name="loginEmail"
               id="loginEmail"
+              type="email"
               className={classes.textField}
               value={loginEmail}
               onChange={onInputChange}
               fullWidth
             />
           </FormControl>
-          <FormControl fullWidth>
+          <FormControl fullWidth disabled={isLoading}>
             <InputLabel htmlFor="loginPassword">Password</InputLabel>
             <Input
               name="loginPassword"
@@ -74,6 +82,7 @@ const LoginForm = ({
             color="primary"
             className={classes.button}
             type="submit"
+            disabled={isLoading}
           >
             Login
           </Button>
