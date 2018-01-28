@@ -8,7 +8,8 @@ import SwipeableViews from 'react-swipeable-views';
 const styles = theme => ({
   root: {
     flex: 1,
-    position: 'relative'
+    position: 'relative',
+    maxWidth: '100vw'
   },
   controller: {
     position: 'absolute',
@@ -47,9 +48,12 @@ const Carousel = ({ activePage, onIndexChange, onPageChange, classes, children }
         onChangeIndex={onIndexChange}
         containerStyle={{ height: '100%' }}
       >
-        {React.Children.map(children, child =>
-          React.cloneElement(child, { className: classes.swipeView })
-        )}
+        {React.Children.map(children, child => {
+          const finalClass = child.props.className
+            ? `${child.props.className} ${classes.swipeView}`
+            : classes.swipeView;
+          return React.cloneElement(child, { className: finalClass });
+        })}
       </SwipeableViews>
       <div className={classes.controller}>
         <Tabs
@@ -59,7 +63,7 @@ const Carousel = ({ activePage, onIndexChange, onPageChange, classes, children }
           indicatorColor="transparent"
           centered
         >
-          {React.Children.map(children, (child, i) => (
+          {React.Children.map(children, child => (
             <Tab
               icon={controlIcon}
               classes={{
