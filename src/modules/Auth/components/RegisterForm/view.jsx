@@ -130,7 +130,7 @@ const RegisterForm = ({
           </Button>
           <div>
             <p className={classes.hintText}>
-              Already registered? <Link to="/">Login</Link> instead.
+              Already have an account? <Link to="/login">Log In</Link>
             </p>
           </div>
         </form>

@@ -79,7 +79,7 @@ const LoginForm = ({
           </Button>
           <div>
             <p className={classes.hintText}>
-              Don't have an account? <Link to="/register">Register</Link> instead.
+              Don't have an account? <Link to="/register">Sign up</Link>
             </p>
           </div>
         </form>

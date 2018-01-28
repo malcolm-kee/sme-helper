@@ -4,12 +4,14 @@ import { Reboot } from 'material-ui';
 
 import LoginForm from './modules/Auth/components/LoginForm';
 import RegisterForm from './modules/Auth/components/RegisterForm';
+import PreloginLanding from './modules/Auth/components/PreloginLanding';
 
 const RootRouter = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/register" component={RegisterForm} />
-      <Route path="/" component={LoginForm} />
+      <Route exact path="/register" component={RegisterForm} />
+      <Route exact path="/login" component={LoginForm} />
+      <Route path="/" component={PreloginLanding} />
     </Switch>
   </BrowserRouter>
 );
