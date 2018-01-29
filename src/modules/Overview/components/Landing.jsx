@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Landing = () => (
   <div>
@@ -7,6 +8,7 @@ const Landing = () => (
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt deleniti vel quis
       illum expedita modi eveniet sunt consequuntur, optio maiores necessitatibus beatae
       dolorem harum magnam suscipit commodi? Aspernatur, quibusdam consectetur.
+      <Link to="/overview/details">Awesome details</Link>
     </p>
     <h2>Post login section 2</h2>
     <p>

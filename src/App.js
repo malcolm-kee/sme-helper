@@ -18,7 +18,7 @@ const RootRouter = () => (
       <Switch>
         <Route exact path="/register" component={RegisterForm} />
         <Route exact path="/login" component={LoginForm} />
-        <Route exact path="/overview" component={Overview} />
+        <Route path="/overview" component={Overview} />
         <Route path="/" component={PreloginLanding} />
       </Switch>
     </BrowserRouter>

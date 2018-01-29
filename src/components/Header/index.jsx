@@ -10,11 +10,11 @@ const styles = theme => ({
   }
 });
 
-const Header = ({ classes, onButtonClick, title }) => (
+const Header = ({ classes, onButtonClick, title, backButton }) => (
   <AppBar position="static">
     <Toolbar>
       <IconButton className={classes.menuButton} onClick={onButtonClick}>
-        <Icon>menu</Icon>
+        <Icon>{backButton ? 'arrow_back' : 'menu'}</Icon>
       </IconButton>
       <Typography type="title" color="inherit">
         {title}
@@ -25,14 +25,16 @@ const Header = ({ classes, onButtonClick, title }) => (
 
 Header.propTypes = {
   onButtonClick: PropTypes.func,
-  title: PropTypes.string
+  title: PropTypes.string,
+  backButton: PropTypes.bool
 };
 
 Header.defaultProps = {
   onButtonClick() {
     /* do nothing */
   },
-  title: ''
+  title: '',
+  backButton: false
 };
 
 export default withStyles(styles)(Header);
