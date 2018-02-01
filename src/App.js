@@ -4,11 +4,16 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Reboot } from 'material-ui';
 
 import configureStore from './config/configureStore';
+import asyncComponent from './components/AsyncComponent';
 
-import LoginForm from './modules/Auth/components/LoginForm';
-import RegisterForm from './modules/Auth/components/RegisterForm';
-import PreloginLanding from './modules/Auth/components/PreloginLanding';
-import Overview from './modules/Overview';
+const LoginForm = asyncComponent(() => import('./modules/Auth/components/LoginForm'));
+const RegisterForm = asyncComponent(() =>
+  import('./modules/Auth/components/RegisterForm')
+);
+const PreloginLanding = asyncComponent(() =>
+  import('./modules/Auth/components/PreloginLanding')
+);
+const Overview = asyncComponent(() => import('./modules/Overview'));
 
 const store = configureStore();
 
