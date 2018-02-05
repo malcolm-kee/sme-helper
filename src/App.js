@@ -14,6 +14,7 @@ const PreloginLanding = asyncComponent(() =>
   import('./modules/Auth/components/PreloginLanding')
 );
 const Overview = asyncComponent(() => import('./modules/Overview'));
+const Search = asyncComponent(() => import('./components/Search'));
 
 const store = configureStore();
 
@@ -23,6 +24,7 @@ const RootRouter = () => (
       <Switch>
         <Route exact path="/register" component={RegisterForm} />
         <Route exact path="/login" component={LoginForm} />
+        <Route exact path="/search" component={Search} />
         <Route path="/overview" component={Overview} />
         <Route path="/" component={PreloginLanding} />
       </Switch>

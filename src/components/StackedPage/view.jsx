@@ -20,9 +20,24 @@ const styles = themes => ({
   }
 });
 
-const StackedPage = ({ classes, navTitle, children, onBack }) => (
+const StackedPage = ({
+  classes,
+  navTitle,
+  children,
+  onBack,
+  rightButton,
+  rightButtonIcon,
+  onRightButtonClick
+}) => (
   <div className={classes.root}>
-    <Header title={navTitle} backButton={true} onButtonClick={onBack} />
+    <Header
+      title={navTitle}
+      backButton={true}
+      onButtonClick={onBack}
+      rightButton={rightButton}
+      rightButtonIcon={rightButtonIcon}
+      onRightButtonClick={onRightButtonClick}
+    />
     <div className={classes.content}>{children}</div>
   </div>
 );

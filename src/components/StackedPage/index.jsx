@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import StackedPage from './view';
+import StackedPageView from './view';
 
 class StackedPageContainer extends React.Component {
   static propTypes = {
-    navTitle: PropTypes.string
+    navTitle: PropTypes.string,
+    rightButton: PropTypes.bool,
+    rightButtonIcon: PropTypes.string,
+    onRightButtonClick: PropTypes.fun
   };
 
   static defaultProps = {
@@ -19,8 +22,10 @@ class StackedPageContainer extends React.Component {
   };
 
   render() {
-    return <StackedPage onBack={this.handleBack} {...this.props} />;
+    return <StackedPageView onBack={this.handleBack} {...this.props} />;
   }
 }
 
-export default withRouter(StackedPageContainer);
+export const StackedPage = withRouter(StackedPageContainer);
+
+export default StackedPage;
