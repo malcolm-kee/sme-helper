@@ -12,7 +12,7 @@ const Landing = () => (
     </p>
     <h2>Post login section 2</h2>
     <p>
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta dignissimos
+      Go to <Link to="/overview/awesome-form">Awesome Form</Link>. Dicta dignissimos
       suscipit, recusandae at laborum tempora, eius ullam harum corporis obcaecati
       quisquam deserunt. Pariatur maiores molestiae, explicabo officia unde qui! Non!
     </p>
