@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import DrawerNavigator from '../../components/DrawerNavigator';
+import { DrawerNavigator } from '../../components/DrawerNavigator';
 
 import Landing from './components/Landing';
 import AwesomeDetails from './components/AwesomeDetails';

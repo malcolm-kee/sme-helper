@@ -6,6 +6,7 @@
     "deep-freeze": "^0.0.1",
     "dev": "^0.1.3",
     "downshift": "^1.28.0",
+    "formik": "^0.11.10",
     "material-ui": "^1.0.0-beta.30",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",

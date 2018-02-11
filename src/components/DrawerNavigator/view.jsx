@@ -24,10 +24,17 @@ const DrawerNavigator = ({
   open,
   openDrawer,
   closeDrawer,
+  goSearch,
   classes
 }) => (
   <div className={classes.root}>
-    <Header title={navTitle} onButtonClick={openDrawer} />
+    <Header
+      title={navTitle}
+      onButtonClick={openDrawer}
+      rightButton
+      rightButtonIcon="search"
+      onRightButtonClick={goSearch}
+    />
     <div className={classes.content}>{children}</div>
     <Drawer anchor="left" open={open} onClose={closeDrawer}>
       <div>

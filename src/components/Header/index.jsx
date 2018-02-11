@@ -69,7 +69,7 @@ Header.propTypes = {
   backButton: PropTypes.bool,
   rightButton: PropTypes.bool,
   rightButtonIcon: PropTypes.string,
-  onRightButtonClick: PropTypes.fun
+  onRightButtonClick: PropTypes.func
 };
 
 Header.defaultProps = {

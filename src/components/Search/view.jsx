@@ -65,9 +65,9 @@ const suggestions = [
   { label: 'Brunei Darussalam' }
 ];
 
-const BackBtn = () => (
+const BackBtn = ({ onClick }) => (
   <InputAdornment position="start">
-    <IconButton>
+    <IconButton onClick={onClick}>
       <Icon>arrow_back</Icon>
     </IconButton>
   </InputAdornment>
@@ -122,7 +122,7 @@ const getSuggestion = inputValue => {
   });
 };
 
-export const SearchView = withStyles(styles)(({ classes }) => (
+export const SearchView = withStyles(styles)(({ classes, onBack }) => (
   <div className={classes.root}>
     <AppBar position="static" color="default">
       <Downshift itemToString={item => (item === null ? '' : item.label)}>
@@ -143,7 +143,7 @@ export const SearchView = withStyles(styles)(({ classes }) => (
                   placeholder: 'Search',
                   id: 'searchInput'
                 }),
-                startAdornment: <BackBtn />,
+                startAdornment: <BackBtn onClick={onBack} />,
                 endAdornment: <SearchBtn />
               })}
             </Toolbar>
