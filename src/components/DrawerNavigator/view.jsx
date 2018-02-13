@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Drawer, List } from 'material-ui';
 import { ListItem, ListItemText } from 'material-ui/List';
 import { withStyles } from 'material-ui/styles';
@@ -39,11 +40,11 @@ const DrawerNavigator = ({
     <Drawer anchor="left" open={open} onClose={closeDrawer}>
       <div>
         <List>
-          <ListItem button>
-            <ListItemText primary="Somewhere" />
+          <ListItem button component={Link} to="/overview">
+            <ListItemText primary="Overview" />
           </ListItem>
-          <ListItem button>
-            <ListItemText primary="Somewhere else" />
+          <ListItem button component={Link} to="/note">
+            <ListItemText primary="Note" />
           </ListItem>
         </List>
       </div>
