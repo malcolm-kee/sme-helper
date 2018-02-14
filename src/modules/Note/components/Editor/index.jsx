@@ -7,30 +7,17 @@ export class Editor extends React.Component {
   cameraHelper = null;
   cameras = [];
   videoRef = null;
+  capturedRef = null;
 
-  async componentDidMount() {
-    this.cameraHelper = new CameraHelper();
-    const cameras = await this.cameraHelper.getCameras();
-    this.cameras = cameras;
-  }
-
-  setVideo = videoRef => {
-    this.videoRef = videoRef;
-  };
-
-  handleCaptureCamera = () => {
-    if (this.cameras.length > 0) {
-      this.startStream(this.cameras[0].deviceId);
-    }
+  state = {
+    cameraShown: false,
+    hasCapture: false
   };
 
   startStream = async deviceId => {
     const stream = await this.cameraHelper.startStream(deviceId);
     if (this.videoRef !== null) {
       this.videoRef.srcObject = stream;
-      this.videoRef.onloadedmetadata = () => {
-        this.videoRef.play();
-      };
     }
   };
 
@@ -39,12 +26,86 @@ export class Editor extends React.Component {
     this.videoRef.pause();
   };
 
+  startCaptureCamera = () => {
+    if (this.cameras.length > 0) {
+      this.startStream(this.cameras[0].deviceId);
+    }
+  };
+
+  takePhoto = async () => {
+    const blob = await this.cameraHelper.takePhoto(this.videoRef);
+    if (blob) {
+      if (this.capturedRef) {
+        const urlCreator = window.URL || window.webkitURL;
+        this.capturedRef.src = urlCreator.createObjectURL(blob);
+        this.setState({
+          hasCapture: true
+        });
+      } else {
+        console.error('capturedRef is null in takePhoto');
+      }
+    } else {
+      console.error('empty blob in takePhoto');
+    }
+  };
+
+  removePhoto = () => {
+    this.capturedRef.src = '';
+    this.setState({
+      hasCapture: false
+    });
+  };
+
+  initiateVideo = videoRef => {
+    this.videoRef = videoRef;
+    this.startCaptureCamera();
+  };
+
+  setCapturedRef = capturedRef => {
+    this.capturedRef = capturedRef;
+  };
+
+  handleStartCamera = () => {
+    this.setState({
+      cameraShown: true
+    });
+  };
+
+  handleCapturePhoto = () => {
+    this.takePhoto()
+      .then(() => this.handleStopCamera())
+      .catch(err => console.error(err));
+  };
+
+  handleStopCamera = () => {
+    this.stopStream();
+    this.setState({
+      cameraShown: false
+    });
+  };
+
+  handleOnLoadedMetada = () => {
+    this.videoRef.play();
+  };
+
+  async componentDidMount() {
+    this.cameraHelper = new CameraHelper();
+    const cameras = await this.cameraHelper.getCameras();
+    this.cameras = cameras;
+  }
+
   render() {
     return (
       <EditorView
-        setRef={this.setVideo}
-        captureCamera={this.handleCaptureCamera}
-        stopStream={this.stopStream}
+        cameraShown={this.state.cameraShown}
+        hasCapture={this.state.hasCapture}
+        setVideoRef={this.initiateVideo}
+        setCapturedRef={this.setCapturedRef}
+        startCamera={this.handleStartCamera}
+        capturePhoto={this.handleCapturePhoto}
+        removePhoto={this.removePhoto}
+        stopCamera={this.handleStopCamera}
+        onVideoLoadedMetada={this.handleOnLoadedMetada}
       />
     );
   }

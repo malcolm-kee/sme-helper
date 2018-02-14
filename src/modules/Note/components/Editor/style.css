@@ -24,3 +24,12 @@
 .Note--Editor .content {
   margin: 0.5rem;
 }
+
+.Note--Editor img {
+  align-self: center;
+  max-width: 100%;
+}
+
+.Note--Editor img[src=''] {
+  display: none;
+}

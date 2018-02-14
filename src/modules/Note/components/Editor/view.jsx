@@ -1,12 +1,14 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
+import IconButton from 'material-ui/IconButton';
+import Icon from 'material-ui/Icon';
+import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
 import Toolbar from 'material-ui/Toolbar';
-import Button from 'material-ui/Button';
 
 import './style.css';
 
-import { constants } from './constants';
-const { SUPPORTS_MEDIA_DEVICES } = constants;
+// import { constants } from './constants';
+// const { SUPPORTS_MEDIA_DEVICES } = constants;
 
 const decorate = withStyles(theme => {
   const root = {
@@ -19,28 +21,68 @@ const decorate = withStyles(theme => {
     flex: 1
   };
 
+  const camera = {
+    maxWidth: '100vw'
+  };
+
+  const cameraContainer = {
+    padding: 0
+  };
+
   const button = {
     margin: theme.spacing.unit
   };
 
-  return { content, root, button };
+  return { camera, cameraContainer, content, root, button };
 });
 
-export const EditorView = decorate(({ setRef, captureCamera, stopStream, classes }) => (
-  <div className={`Note--Editor ${classes.root}`}>
-    <div className="title" contentEditable />
-    <div className={`content ${classes.content}`} contentEditable />
-    <video ref={video => setRef(video)} />
-    <Toolbar>
-      <Button color="primary" onClick={stopStream} className={classes.button}>
-        Stop Camera
-      </Button>
-      <Button color="primary" onClick={captureCamera} className={classes.button}>
-        {SUPPORTS_MEDIA_DEVICES ? 'Camera' : 'Upload'}
-      </Button>
-      <Button color="primary" className={classes.button}>
-        Save
-      </Button>
-    </Toolbar>
-  </div>
-));
+export const EditorView = decorate(
+  ({
+    setVideoRef,
+    setCapturedRef,
+    startCamera,
+    capturePhoto,
+    removePhoto,
+    stopCamera,
+    onVideoLoadedMetada,
+    cameraShown,
+    hasCapture,
+    classes
+  }) => (
+    <div className={`Note--Editor ${classes.root}`}>
+      <div className="title" contentEditable />
+      <div className={`content ${classes.content}`} contentEditable />
+      <img alt="captured" src="" ref={capture => setCapturedRef(capture)} />
+      <Toolbar>
+        <IconButton color="primary" onClick={startCamera} className={classes.button}>
+          <Icon>add_a_photo</Icon>
+        </IconButton>
+        <IconButton color="primary" className={classes.button}>
+          <Icon>save</Icon>
+        </IconButton>
+        {hasCapture ? (
+          <IconButton color="primary" onClick={removePhoto} className={classes.button}>
+            <Icon>delete</Icon>
+          </IconButton>
+        ) : null}
+      </Toolbar>
+      <Dialog open={cameraShown} fullScreen>
+        <DialogContent className={classes.cameraContainer}>
+          <video
+            ref={video => setVideoRef(video)}
+            onLoadedMetadata={onVideoLoadedMetada}
+            className={classes.camera}
+          />
+        </DialogContent>
+        <DialogActions>
+          <IconButton color="primary" onClick={capturePhoto} className={classes.button}>
+            <Icon>lens</Icon>
+          </IconButton>
+          <IconButton color="primary" onClick={stopCamera} className={classes.button}>
+            <Icon>close</Icon>
+          </IconButton>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
+);
