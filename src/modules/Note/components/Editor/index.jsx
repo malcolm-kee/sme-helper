@@ -111,6 +111,7 @@ export class Editor extends React.Component {
     this.cameraHelper = new CameraHelper();
     const cameras = await this.cameraHelper.getCameras();
     this.cameras = cameras;
+    console.log('cdm: cameras', cameras, cameras.length);
   }
 
   render() {
