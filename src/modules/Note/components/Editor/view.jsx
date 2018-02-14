@@ -44,9 +44,11 @@ export const EditorView = decorate(
     capturePhoto,
     removePhoto,
     stopCamera,
+    toggleCamera,
     onVideoLoadedMetada,
     cameraShown,
     hasCapture,
+    enableToggleCamera,
     classes
   }) => (
     <div className={`Note--Editor ${classes.root}`}>
@@ -78,6 +80,11 @@ export const EditorView = decorate(
           <IconButton color="primary" onClick={capturePhoto} className={classes.button}>
             <Icon>lens</Icon>
           </IconButton>
+          {enableToggleCamera ? (
+            <IconButton color="primary" onClick={toggleCamera} className={classes.button}>
+              <Icon>camera_rear</Icon>
+            </IconButton>
+          ) : null}
           <IconButton color="primary" onClick={stopCamera} className={classes.button}>
             <Icon>close</Icon>
           </IconButton>

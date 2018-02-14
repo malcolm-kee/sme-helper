@@ -6,12 +6,31 @@ import { EditorView } from './view';
 export class Editor extends React.Component {
   cameraHelper = null;
   cameras = [];
+  currentCamera = null;
   videoRef = null;
   capturedRef = null;
 
   state = {
     cameraShown: false,
     hasCapture: false
+  };
+
+  chooseCamera = async camera => {
+    this.currentCamera = camera;
+    await this.startStream(this.currentCamera.id);
+  };
+
+  toggleCamera = () => {
+    if (this.cameras.length < 2) {
+      return;
+    }
+
+    if (this.currentCamera) {
+      const currentIndex = this.cameras.indexOf(this.currentCamera);
+      this.chooseCamera(this.cameras[(currentIndex + 1) % this.cameras.length]);
+    } else {
+      this.chooseCamera(this.cameras[0]);
+    }
   };
 
   startStream = async deviceId => {
@@ -28,7 +47,7 @@ export class Editor extends React.Component {
 
   startCaptureCamera = () => {
     if (this.cameras.length > 0) {
-      this.startStream(this.cameras[0].deviceId);
+      this.chooseCamera(this.cameras[0]);
     }
   };
 
@@ -99,6 +118,8 @@ export class Editor extends React.Component {
       <EditorView
         cameraShown={this.state.cameraShown}
         hasCapture={this.state.hasCapture}
+        enableToggleCamera={this.cameras.length > 1}
+        toggleCamera={this.toggleCamera}
         setVideoRef={this.initiateVideo}
         setCapturedRef={this.setCapturedRef}
         startCamera={this.handleStartCamera}
