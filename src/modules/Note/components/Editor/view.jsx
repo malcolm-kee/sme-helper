@@ -38,6 +38,7 @@ const decorate = withStyles(theme => {
 
 export const EditorView = decorate(
   ({
+    cameras,
     setVideoRef,
     setCapturedRef,
     startCamera,
@@ -54,6 +55,7 @@ export const EditorView = decorate(
     <div className={`Note--Editor ${classes.root}`}>
       <div className="title" contentEditable />
       <div className={`content ${classes.content}`} contentEditable />
+      <div>{JSON.stringify(cameras, null, 2)}</div>
       <img alt="captured" src="" ref={capture => setCapturedRef(capture)} />
       <Toolbar>
         <IconButton color="primary" onClick={startCamera} className={classes.button}>

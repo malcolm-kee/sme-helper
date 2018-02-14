@@ -12,7 +12,8 @@ export class Editor extends React.Component {
 
   state = {
     cameraShown: false,
-    hasCapture: false
+    hasCapture: false,
+    cameras: null
   };
 
   chooseCamera = async camera => {
@@ -112,6 +113,7 @@ export class Editor extends React.Component {
     const cameras = await this.cameraHelper.getCameras();
     this.cameras = cameras;
     console.log('cdm: cameras', cameras, cameras.length);
+    this.setState({ cameras });
   }
 
   render() {
@@ -119,6 +121,7 @@ export class Editor extends React.Component {
       <EditorView
         cameraShown={this.state.cameraShown}
         hasCapture={this.state.hasCapture}
+        cameras={this.state.cameras}
         enableToggleCamera={this.cameras.length > 1}
         toggleCamera={this.toggleCamera}
         setVideoRef={this.initiateVideo}
