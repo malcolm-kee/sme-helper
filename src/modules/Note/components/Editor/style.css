@@ -5,24 +5,13 @@
 }
 
 .Note--Editor .title:empty::before {
-  color: #444;
-  font-style: italic;
+  color: #9e9e9e;
   content: 'Title';
 }
 
-.Note--Editor .title {
-  border-bottom: 1px solid #888;
-  margin: 0 0.5rem;
-}
-
 .Note--Editor .content:empty::before {
-  color: #444;
-  font-style: italic;
+  color: #9e9e9e;
   content: 'Add your note';
-}
-
-.Note--Editor .content {
-  margin: 0.5rem;
 }
 
 .Note--Editor img {

@@ -2,13 +2,14 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import Icon from 'material-ui/Icon';
-import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
 import Toolbar from 'material-ui/Toolbar';
 
 import './style.css';
 
 // import { constants } from './constants';
 // const { SUPPORTS_MEDIA_DEVICES } = constants;
+
+import { Camera } from '../../../../components/Camera';
 
 const decorate = withStyles(theme => {
   const root = {
@@ -18,7 +19,9 @@ const decorate = withStyles(theme => {
   };
 
   const content = {
-    flex: 1
+    flex: 1,
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2
   };
 
   const camera = {
@@ -33,30 +36,34 @@ const decorate = withStyles(theme => {
     margin: theme.spacing.unit
   };
 
-  return { camera, cameraContainer, content, root, button };
+  const title = {
+    fontSize: theme.typography.title.fontSize,
+    borderBottom: `1px solid ${theme.palette.grey['300']}`,
+    marginTop: theme.spacing.unit * 2,
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2
+  };
+
+  return { camera, cameraContainer, content, root, button, title };
 });
 
 export const EditorView = decorate(
   ({
-    setVideoRef,
-    setCapturedRef,
-    startCamera,
-    capturePhoto,
-    removePhoto,
-    stopCamera,
-    toggleCamera,
-    onVideoLoadedMetada,
     cameraShown,
     hasCapture,
-    enableToggleCamera,
+    setCapturedRef,
+    openCamera,
+    removePhoto,
+    onPhotoCaptured,
+    onCameraClosed,
     classes
   }) => (
     <div className={`Note--Editor ${classes.root}`}>
-      <div className="title" contentEditable />
+      <div className={`title ${classes.title}`} contentEditable />
       <div className={`content ${classes.content}`} contentEditable />
       <img alt="captured" src="" ref={capture => setCapturedRef(capture)} />
       <Toolbar>
-        <IconButton color="primary" onClick={startCamera} className={classes.button}>
+        <IconButton color="primary" onClick={openCamera} className={classes.button}>
           <Icon>add_a_photo</Icon>
         </IconButton>
         <IconButton color="primary" className={classes.button}>
@@ -68,28 +75,11 @@ export const EditorView = decorate(
           </IconButton>
         ) : null}
       </Toolbar>
-      <Dialog open={cameraShown} fullScreen>
-        <DialogContent className={classes.cameraContainer}>
-          <video
-            ref={video => setVideoRef(video)}
-            onLoadedMetadata={onVideoLoadedMetada}
-            className={classes.camera}
-          />
-        </DialogContent>
-        <DialogActions>
-          <IconButton color="primary" onClick={capturePhoto} className={classes.button}>
-            <Icon>lens</Icon>
-          </IconButton>
-          {enableToggleCamera ? (
-            <IconButton color="primary" onClick={toggleCamera} className={classes.button}>
-              <Icon>camera_rear</Icon>
-            </IconButton>
-          ) : null}
-          <IconButton color="primary" onClick={stopCamera} className={classes.button}>
-            <Icon>close</Icon>
-          </IconButton>
-        </DialogActions>
-      </Dialog>
+      <Camera
+        open={cameraShown}
+        onPhotoCaptured={onPhotoCaptured}
+        onCameraClose={onCameraClosed}
+      />
     </div>
   )
 );
