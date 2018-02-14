@@ -55,7 +55,17 @@ export const EditorView = decorate(
     <div className={`Note--Editor ${classes.root}`}>
       <div className="title" contentEditable />
       <div className={`content ${classes.content}`} contentEditable />
-      <div>{JSON.stringify(cameras, null, 2)}</div>
+      <div>
+        {cameras &&
+          cameras.length &&
+          cameras.map(camera => (
+            <div key={camera.deviceId}>
+              <div>deviceId: {camera.deviceId}</div>
+              <div>kind: {camera.kind}</div>
+              <div>label: {camera.label}</div>
+            </div>
+          ))}
+      </div>
       <img alt="captured" src="" ref={capture => setCapturedRef(capture)} />
       <Toolbar>
         <IconButton color="primary" onClick={startCamera} className={classes.button}>
