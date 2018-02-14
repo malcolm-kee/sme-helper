@@ -7,11 +7,24 @@ export class Editor extends React.Component {
 
   state = {
     cameraShown: false,
-    hasCapture: false
+    hasCapture: false,
+    menuAnchorEl: null
   };
 
   setCapturedRef = capturedRef => {
     this.capturedRef = capturedRef;
+  };
+
+  handleOpenMenu = ev => {
+    this.setState({
+      menuAnchorEl: ev.currentTarget
+    });
+  };
+
+  handleCloseMenu = () => {
+    this.setState({
+      menuAnchorEl: null
+    });
   };
 
   handleOpenCamera = () => {
@@ -43,6 +56,9 @@ export class Editor extends React.Component {
   render() {
     return (
       <EditorView
+        menuAnchor={this.state.menuAnchorEl}
+        openMenu={this.handleOpenMenu}
+        closeMenu={this.handleCloseMenu}
         cameraShown={this.state.cameraShown}
         hasCapture={this.state.hasCapture}
         setCapturedRef={this.setCapturedRef}

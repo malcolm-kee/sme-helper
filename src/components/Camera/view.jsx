@@ -2,7 +2,8 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import Icon from 'material-ui/Icon';
-import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
+import Dialog from 'material-ui/Dialog';
+import Toolbar from 'material-ui/Toolbar';
 
 const decorate = withStyles(theme => {
   const camera = {
@@ -10,7 +11,8 @@ const decorate = withStyles(theme => {
   };
 
   const cameraContainer = {
-    padding: 0
+    padding: 0,
+    display: 'relative'
   };
 
   const button = {
@@ -25,7 +27,46 @@ const decorate = withStyles(theme => {
     marginRight: theme.spacing.unit * 2
   };
 
-  return { camera, cameraContainer, button, title };
+  const closeButton = {
+    position: 'absolute',
+    color: theme.palette.grey['100'],
+    top: 0,
+    right: 0
+  };
+
+  const captureButton = {
+    height: 'auto',
+    width: 'auto'
+  };
+
+  const actionIcon = {
+    fontSize: theme.typography.display2.fontSize,
+    fontWeight: theme.typography.fontWeightMedium
+  };
+
+  const captureIcon = {
+    fontSize: theme.typography.display4.fontSize,
+    fontWeight: theme.typography.fontWeightMedium
+  };
+
+  const btnGroup = {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    justifyContent: 'space-between'
+  };
+
+  return {
+    camera,
+    cameraContainer,
+    button,
+    title,
+    closeButton,
+    actionIcon,
+    btnGroup,
+    captureButton,
+    captureIcon
+  };
 });
 
 export const CameraView = decorate(
@@ -41,26 +82,33 @@ export const CameraView = decorate(
     classes
   }) => (
     <Dialog open={open} fullScreen>
-      <DialogContent className={classes.cameraContainer}>
+      <div className={classes.cameraContainer}>
         <video
           ref={video => setVideoRef(video)}
           onLoadedMetadata={onVideoLoadedMetada}
           className={classes.camera}
         />
-      </DialogContent>
-      <DialogActions>
-        <IconButton color="primary" onClick={capturePhoto} className={classes.button}>
-          <Icon>lens</Icon>
+        <IconButton onClick={stopCamera} className={classes.closeButton}>
+          <Icon className={classes.actionIcon}>close</Icon>
         </IconButton>
-        {enableToggleCamera ? (
-          <IconButton color="primary" onClick={toggleCamera} className={classes.button}>
-            <Icon>camera_rear</Icon>
+        <Toolbar className={classes.btnGroup}>
+          <div />
+          <IconButton
+            color="primary"
+            onClick={capturePhoto}
+            className={classes.captureButton}
+          >
+            <Icon className={classes.captureIcon}>panorama_fish_eye</Icon>
           </IconButton>
-        ) : null}
-        <IconButton color="primary" onClick={stopCamera} className={classes.button}>
-          <Icon>close</Icon>
-        </IconButton>
-      </DialogActions>
+          {enableToggleCamera ? (
+            <IconButton color="primary" onClick={toggleCamera} className={classes.button}>
+              <Icon className={classes.actionIcon}>camera_rear</Icon>
+            </IconButton>
+          ) : (
+            <div />
+          )}
+        </Toolbar>
+      </div>
     </Dialog>
   )
 );
