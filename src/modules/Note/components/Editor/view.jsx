@@ -93,6 +93,7 @@ export const EditorView = decorate(
     onImageRemove,
     onFileSelected,
     onFileRemove,
+    onSave,
     classes
   }) => (
     <StackedPage navTitle="Edit Note">
@@ -206,7 +207,7 @@ export const EditorView = decorate(
                 </Typography>
               </MenuItem>
             </Menu>
-            <IconButton color="primary" className={classes.button}>
+            <IconButton onClick={onSave} color="primary" className={classes.button}>
               <Icon>save</Icon>
             </IconButton>
           </Toolbar>

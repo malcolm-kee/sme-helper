@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { updateNote } from '../../../../actions/note';
 import { reduce } from '../../../../utils/fp';
 
 import { EditorView } from './view';
@@ -80,6 +81,11 @@ class EditorContainer extends React.Component {
     });
   };
 
+  handleSave = () => {
+    this.props.dispatchUpdateNote(this.state.title, this.state.content);
+    this.props.history.goBack();
+  };
+
   render() {
     return (
       <EditorView
@@ -95,6 +101,7 @@ class EditorContainer extends React.Component {
         onImageRemove={this.handleImageRemove}
         onFileSelected={this.handleFileSelected}
         onFileRemove={this.handleFileRemove}
+        onSave={this.handleSave}
       />
     );
   }
@@ -111,4 +118,10 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export const Editor = connect(mapStateToProps)(EditorContainer);
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  dispatchUpdateNote(title, content) {
+    dispatch(updateNote(Number(ownProps.match.params.id), title, content));
+  }
+});
+
+export const Editor = connect(mapStateToProps, mapDispatchToProps)(EditorContainer);

@@ -27,7 +27,9 @@ class GalleryContainer extends React.Component {
   };
 
   componentDidMount() {
-    this.props.dispatchSetNotes(noteData.data);
+    if (this.props.notes.length === 0) {
+      this.props.dispatchSetNotes(noteData.data);
+    }
   }
 
   render() {
