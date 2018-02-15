@@ -9,6 +9,8 @@ class EditorContainer extends React.Component {
   state = {
     images: [],
     attachments: [],
+    title: this.props.title,
+    content: this.props.content,
     menuAnchorEl: null
   };
 
@@ -70,14 +72,25 @@ class EditorContainer extends React.Component {
     }));
   };
 
+  handleContentChange = e => {
+    const { name, value } = e.target;
+
+    this.setState({
+      [name]: value
+    });
+  };
+
   render() {
     return (
       <EditorView
         menuAnchor={this.state.menuAnchorEl}
         images={this.state.images}
         attachments={this.state.attachments}
+        title={this.state.title}
+        content={this.state.content}
         openMenu={this.handleOpenMenu}
         closeMenu={this.handleCloseMenu}
+        onContentChange={this.handleContentChange}
         onImageSelected={this.handleImageSelected}
         onImageRemove={this.handleImageRemove}
         onFileSelected={this.handleFileSelected}
@@ -88,14 +101,13 @@ class EditorContainer extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const note = state.note.data.find(note => note.id === Number(ownProps.match.params.id));
-
-  console.log('state', state);
-  console.log('ownProps', ownProps);
-  console.log('note', note);
+  const { title, content } = state.note.data.find(
+    note => note.id === Number(ownProps.match.params.id)
+  );
 
   return {
-    note
+    title,
+    content
   };
 };
 

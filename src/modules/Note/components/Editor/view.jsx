@@ -21,6 +21,7 @@ import './style.css';
 // const { SUPPORTS_MEDIA_DEVICES } = constants;
 
 import { StackedPage } from '../../../../components/StackedPage';
+import { ContentEditable } from '../../../../components/ContentEditable';
 import { reduce } from '../../../../utils/fp';
 
 const decorate = withStyles(theme => {
@@ -83,8 +84,11 @@ export const EditorView = decorate(
     menuAnchor,
     images,
     attachments,
+    title,
+    content,
     openMenu,
     closeMenu,
+    onContentChange,
     onImageSelected,
     onImageRemove,
     onFileSelected,
@@ -93,8 +97,18 @@ export const EditorView = decorate(
   }) => (
     <StackedPage navTitle="Edit Note">
       <div className={`Note--Editor ${classes.root}`}>
-        <div className={`title ${classes.title}`} contentEditable />
-        <div className={`content ${classes.content}`} contentEditable />
+        <ContentEditable
+          className={`title ${classes.title}`}
+          name="title"
+          html={title}
+          onChange={onContentChange}
+        />
+        <ContentEditable
+          className={`content ${classes.content}`}
+          name="content"
+          html={content}
+          onChange={onContentChange}
+        />
         <List className={classes.fileList}>
           {images && images.length > 0
             ? reduce(
