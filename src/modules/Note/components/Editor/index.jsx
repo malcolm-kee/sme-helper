@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { updateNote } from '../../../../actions/note';
+import { noteStore } from '../../../../services/db';
 import { reduce } from '../../../../utils/fp';
 
 import { EditorView } from './view';
@@ -82,9 +83,26 @@ class EditorContainer extends React.Component {
   };
 
   handleSave = () => {
-    this.props.dispatchUpdateNote(this.state.title, this.state.content);
-    this.props.history.goBack();
+    const { dispatchUpdateNote, match } = this.props;
+    const { title, content, images, attachments } = this.state;
+
+    dispatchUpdateNote(title, content);
+    noteStore
+      .set(match.params.id, {
+        id: match.params.id,
+        title,
+        content,
+        images,
+        attachments
+      })
+      .then(() => this.props.history.goBack());
   };
+
+  componentWillMount() {
+    noteStore.get(this.props.match.params.id).then(note => {
+      this.setState(note);
+    });
+  }
 
   render() {
     return (
@@ -109,7 +127,7 @@ class EditorContainer extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { title, content } = state.note.data.find(
-    note => note.id === Number(ownProps.match.params.id)
+    note => note.id === ownProps.match.params.id
   );
 
   return {

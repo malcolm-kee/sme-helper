@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 
 import { setNotes } from '../../../../actions/note';
 
-import noteData from './data.json';
-
 import { GalleryView } from './view';
 
 const initialState = {
@@ -25,12 +23,6 @@ class GalleryContainer extends React.Component {
       ...initialState
     });
   };
-
-  componentDidMount() {
-    if (this.props.notes.length === 0) {
-      this.props.dispatchSetNotes(noteData.data);
-    }
-  }
 
   render() {
     const { notes } = this.props;
