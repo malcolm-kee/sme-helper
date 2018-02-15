@@ -1,18 +1,14 @@
 import React from 'react';
 
+import { reduce } from '../../../../utils/fp';
+
 import { EditorView } from './view';
 
 export class Editor extends React.Component {
-  capturedRef = null;
-
   state = {
-    cameraShown: false,
-    hasCapture: false,
+    images: [],
+    attachments: [],
     menuAnchorEl: null
-  };
-
-  setCapturedRef = capturedRef => {
-    this.capturedRef = capturedRef;
   };
 
   handleOpenMenu = ev => {
@@ -27,45 +23,64 @@ export class Editor extends React.Component {
     });
   };
 
-  handleOpenCamera = () => {
-    this.setState({
-      cameraShown: true
-    });
+  handleFileSelected = ev => {
+    const { target } = ev;
+    const files = target.files;
+
+    this.setState(
+      prevState => ({
+        attachments: reduce(files, (acc, file) => [...acc, file], prevState.attachments)
+      }),
+      () => {
+        target.value = '';
+      }
+    );
   };
 
-  handlePhotoCaptured = objUrl => {
-    this.capturedRef.src = objUrl;
-    this.setState({
-      hasCapture: true
-    });
+  handleFileRemove = fileIndex => {
+    this.setState(prevState => ({
+      attachments: [
+        ...prevState.attachments.slice(0, fileIndex),
+        ...prevState.attachments.slice(fileIndex + 1)
+      ]
+    }));
   };
 
-  handleCameraClosed = () => {
-    this.setState({
-      cameraShown: false
-    });
+  handleImageSelected = ev => {
+    const { target } = ev;
+    const image = target.files[0];
+
+    this.setState(
+      prevState => ({
+        images: [...prevState.images, image]
+      }),
+      () => {
+        target.value = '';
+      }
+    );
   };
 
-  handleRemovePhoto = () => {
-    this.capturedRef.src = '';
-    this.setState({
-      hasCapture: false
-    });
+  handleImageRemove = imageIndex => {
+    this.setState(prevState => ({
+      images: [
+        ...prevState.images.slice(0, imageIndex),
+        ...prevState.images.slice(imageIndex + 1)
+      ]
+    }));
   };
 
   render() {
     return (
       <EditorView
         menuAnchor={this.state.menuAnchorEl}
+        images={this.state.images}
+        attachments={this.state.attachments}
         openMenu={this.handleOpenMenu}
         closeMenu={this.handleCloseMenu}
-        cameraShown={this.state.cameraShown}
-        hasCapture={this.state.hasCapture}
-        setCapturedRef={this.setCapturedRef}
-        openCamera={this.handleOpenCamera}
-        removePhoto={this.handleRemovePhoto}
-        onPhotoCaptured={this.handlePhotoCaptured}
-        onCameraClosed={this.handleCameraClosed}
+        onImageSelected={this.handleImageSelected}
+        onImageRemove={this.handleImageRemove}
+        onFileSelected={this.handleFileSelected}
+        onFileRemove={this.handleFileRemove}
       />
     );
   }
