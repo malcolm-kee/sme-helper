@@ -9,7 +9,7 @@ class StackedPageContainer extends React.Component {
     navTitle: PropTypes.string,
     rightButton: PropTypes.bool,
     rightButtonIcon: PropTypes.string,
-    onRightButtonClick: PropTypes.fun
+    onRightButtonClick: PropTypes.func
   };
 
   static defaultProps = {

@@ -20,6 +20,7 @@ import './style.css';
 // import { constants } from './constants';
 // const { SUPPORTS_MEDIA_DEVICES } = constants;
 
+import { StackedPage } from '../../../../components/StackedPage';
 import { reduce } from '../../../../utils/fp';
 
 const decorate = withStyles(theme => {
@@ -90,111 +91,113 @@ export const EditorView = decorate(
     onFileRemove,
     classes
   }) => (
-    <div className={`Note--Editor ${classes.root}`}>
-      <div className={`title ${classes.title}`} contentEditable />
-      <div className={`content ${classes.content}`} contentEditable />
-      <List className={classes.fileList}>
-        {images && images.length > 0
-          ? reduce(
-              images,
-              (acc, image, index) => [
-                ...acc,
-                <Divider key={`imageDivi-${index}`} />,
-                <ListItem key={`imageItem-${index}`}>
-                  <ListItemIcon>
-                    <Icon>image</Icon>
-                  </ListItemIcon>
-                  <ListItemText primary={image.name} />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={() => onImageRemove(index)} color="primary">
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ],
-              []
-            )
-          : null}
-        {attachments && attachments.length > 0
-          ? reduce(
-              attachments,
-              (acc, attachment, index) => [
-                ...acc,
-                <Divider key={`divi-${index}`} />,
-                <ListItem key={`item-${index}`}>
-                  <ListItemIcon>
-                    <Icon>attach_file</Icon>
-                  </ListItemIcon>
-                  <ListItemText primary={attachment.name} />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={() => onFileRemove(index)} color="primary">
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ],
-              []
-            )
-          : null}
-      </List>
-      <input
-        type="file"
-        name="photo"
-        accept="image/*"
-        capture
-        onChange={onImageSelected}
-        id="Note--photo"
-        className={classes.fileInput}
-      />
-      <input
-        type="file"
-        name="attachment"
-        onChange={onFileSelected}
-        multiple
-        id="Note--attachment"
-        className={classes.fileInput}
-      />
-      <AppBar position="static" color="default">
-        <Toolbar className={classes.btmToolbar}>
-          <IconButton color="primary" onClick={openMenu} className={classes.button}>
-            <Icon>add_box</Icon>
-          </IconButton>
-          <Menu
-            open={Boolean(menuAnchor)}
-            anchorEl={menuAnchor}
-            onClose={closeMenu}
-            transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          >
-            <MenuItem onClick={closeMenu}>
-              <ListItemIcon color="primary" className={classes.button}>
-                <Icon>image</Icon>
-              </ListItemIcon>
-              <Typography
-                component="label"
-                htmlFor="Note--photo"
-                className={classes.listItemText}
-              >
-                Add Image
-              </Typography>
-            </MenuItem>
-            <MenuItem onClick={closeMenu}>
-              <ListItemIcon color="primary" className={classes.button}>
-                <Icon>attach_file</Icon>
-              </ListItemIcon>
-              <Typography
-                component="label"
-                htmlFor="Note--attachment"
-                className={classes.listItemText}
-              >
-                Attach File
-              </Typography>
-            </MenuItem>
-          </Menu>
-          <IconButton color="primary" className={classes.button}>
-            <Icon>save</Icon>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <StackedPage navTitle="Edit Note">
+      <div className={`Note--Editor ${classes.root}`}>
+        <div className={`title ${classes.title}`} contentEditable />
+        <div className={`content ${classes.content}`} contentEditable />
+        <List className={classes.fileList}>
+          {images && images.length > 0
+            ? reduce(
+                images,
+                (acc, image, index) => [
+                  ...acc,
+                  <Divider key={`imageDivi-${index}`} />,
+                  <ListItem key={`imageItem-${index}`}>
+                    <ListItemIcon>
+                      <Icon>image</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary={image.name} />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => onImageRemove(index)} color="primary">
+                        <Icon>delete</Icon>
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ],
+                []
+              )
+            : null}
+          {attachments && attachments.length > 0
+            ? reduce(
+                attachments,
+                (acc, attachment, index) => [
+                  ...acc,
+                  <Divider key={`divi-${index}`} />,
+                  <ListItem key={`item-${index}`}>
+                    <ListItemIcon>
+                      <Icon>attach_file</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary={attachment.name} />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => onFileRemove(index)} color="primary">
+                        <Icon>delete</Icon>
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ],
+                []
+              )
+            : null}
+        </List>
+        <input
+          type="file"
+          name="photo"
+          accept="image/*"
+          capture
+          onChange={onImageSelected}
+          id="Note--photo"
+          className={classes.fileInput}
+        />
+        <input
+          type="file"
+          name="attachment"
+          onChange={onFileSelected}
+          multiple
+          id="Note--attachment"
+          className={classes.fileInput}
+        />
+        <AppBar position="static" color="default">
+          <Toolbar className={classes.btmToolbar}>
+            <IconButton color="primary" onClick={openMenu} className={classes.button}>
+              <Icon>add_box</Icon>
+            </IconButton>
+            <Menu
+              open={Boolean(menuAnchor)}
+              anchorEl={menuAnchor}
+              onClose={closeMenu}
+              transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+              <MenuItem onClick={closeMenu}>
+                <ListItemIcon color="primary" className={classes.button}>
+                  <Icon>image</Icon>
+                </ListItemIcon>
+                <Typography
+                  component="label"
+                  htmlFor="Note--photo"
+                  className={classes.listItemText}
+                >
+                  Add Image
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={closeMenu}>
+                <ListItemIcon color="primary" className={classes.button}>
+                  <Icon>attach_file</Icon>
+                </ListItemIcon>
+                <Typography
+                  component="label"
+                  htmlFor="Note--attachment"
+                  className={classes.listItemText}
+                >
+                  Attach File
+                </Typography>
+              </MenuItem>
+            </Menu>
+            <IconButton color="primary" className={classes.button}>
+              <Icon>save</Icon>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </div>
+    </StackedPage>
   )
 );

@@ -1,10 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { reduce } from '../../../../utils/fp';
 
 import { EditorView } from './view';
 
-export class Editor extends React.Component {
+class EditorContainer extends React.Component {
   state = {
     images: [],
     attachments: [],
@@ -85,3 +86,17 @@ export class Editor extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  const note = state.note.data.find(note => note.id === Number(ownProps.match.params.id));
+
+  console.log('state', state);
+  console.log('ownProps', ownProps);
+  console.log('note', note);
+
+  return {
+    note
+  };
+};
+
+export const Editor = connect(mapStateToProps)(EditorContainer);
