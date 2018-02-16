@@ -10,6 +10,7 @@ export const Note = () => (
   <DrawerNavigator navTitle="Note">
     <Switch>
       <Route path="/note/edit/:id" component={Editor} />
+      <Route exact path="/note/add" component={Editor} />
       <Route path="/note" component={Gallery} />
     </Switch>
   </DrawerNavigator>

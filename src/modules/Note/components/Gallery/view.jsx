@@ -1,8 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
 import Dialog, { DialogTitle, DialogContent } from 'material-ui/Dialog';
 import Card, { CardContent } from 'material-ui/Card';
+import Icon from 'material-ui/Icon';
 import Typography from 'material-ui/Typography';
 
 const decorate = withStyles(theme => {
@@ -30,11 +33,18 @@ const decorate = withStyles(theme => {
     overflowY: 'scroll'
   };
 
+  const addButton = {
+    position: 'absolute',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2
+  };
+
   return {
     container,
     card,
     cardContent,
-    noteContent
+    noteContent,
+    addButton
   };
 });
 
@@ -49,6 +59,16 @@ export const GalleryView = decorate(
           </CardContent>
         </Card>
       ))}
+      <Button
+        component={Link}
+        color="primary"
+        fab
+        raised
+        to="/note/add"
+        className={classes.addButton}
+      >
+        <Icon>note_add</Icon>
+      </Button>
       <Dialog open={showNoteDetails} fullScreen={true}>
         <DialogTitle>{detailedTitle}</DialogTitle>
         <DialogContent>{detailedContent}</DialogContent>

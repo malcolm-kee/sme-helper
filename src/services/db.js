@@ -1,9 +1,12 @@
 import idb from 'idb';
 
 const dbPromise = idb.open('app', 1, upgradeDB => {
-  if (!upgradeDB.objectStoreNames.contains('note')) {
-    upgradeDB.createObjectStore('note');
+  /* eslint-disable */
+  switch (upgradeDB.oldVersion) {
+    case 0:
+      upgradeDB.createObjectStore('note', { keyPath: 'id' });
   }
+  /* eslint-enable */
 });
 
 export const noteStore = {
@@ -15,10 +18,17 @@ export const noteStore = {
         .get(key)
     );
   },
-  set(key, val) {
+  add(note) {
     return dbPromise.then(db => {
       const tx = db.transaction('note', 'readwrite');
-      tx.objectStore('note').put(val, key);
+      tx.objectStore('note').put(note);
+      return tx.complete;
+    });
+  },
+  set(key, note) {
+    return dbPromise.then(db => {
+      const tx = db.transaction('note', 'readwrite');
+      tx.objectStore('note').put(note);
       return tx.complete;
     });
   },

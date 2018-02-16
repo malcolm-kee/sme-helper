@@ -81,6 +81,7 @@ const decorate = withStyles(theme => {
 
 export const EditorView = decorate(
   ({
+    isNew,
     menuAnchor,
     images,
     attachments,
@@ -94,9 +95,15 @@ export const EditorView = decorate(
     onFileSelected,
     onFileRemove,
     onSave,
+    onDelete,
     classes
   }) => (
-    <StackedPage navTitle="Edit Note">
+    <StackedPage
+      navTitle={isNew ? 'Add Note' : 'Edit Note'}
+      rightButton={true}
+      rightButtonIcon="delete"
+      onRightButtonClick={onDelete}
+    >
       <div className={`Note--Editor ${classes.root}`}>
         <ContentEditable
           className={`title ${classes.title}`}

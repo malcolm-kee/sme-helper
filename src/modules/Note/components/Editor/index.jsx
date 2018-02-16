@@ -1,13 +1,31 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { updateNote } from '../../../../actions/note';
+import { initAddNote, initUpdateNote, initRemoveNote } from '../../../../actions/note';
 import { noteStore } from '../../../../services/db';
 import { reduce } from '../../../../utils/fp';
 
 import { EditorView } from './view';
 
 class EditorContainer extends React.Component {
+  static propTypes = {
+    isNew: PropTypes.bool.isRequired,
+    dispatchSave: PropTypes.func.isRequired,
+    dispatchRemove: PropTypes.func,
+    history: PropTypes.shape({
+      goBack: PropTypes.func.isRequired
+    }).isRequired,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    createdOn: PropTypes.object
+  };
+
+  static defaultProps = {
+    title: '',
+    content: ''
+  };
+
   state = {
     images: [],
     attachments: [],
@@ -32,14 +50,16 @@ class EditorContainer extends React.Component {
     const { target } = ev;
     const files = target.files;
 
-    this.setState(
-      prevState => ({
-        attachments: reduce(files, (acc, file) => [...acc, file], prevState.attachments)
-      }),
-      () => {
-        target.value = '';
-      }
-    );
+    if (files) {
+      this.setState(
+        prevState => ({
+          attachments: reduce(files, (acc, file) => [...acc, file], prevState.attachments)
+        }),
+        () => {
+          target.value = '';
+        }
+      );
+    }
   };
 
   handleFileRemove = fileIndex => {
@@ -53,16 +73,20 @@ class EditorContainer extends React.Component {
 
   handleImageSelected = ev => {
     const { target } = ev;
-    const image = target.files[0];
+    const image = target.files ? target.files[0] : null;
 
-    this.setState(
-      prevState => ({
-        images: [...prevState.images, image]
-      }),
-      () => {
-        target.value = '';
-      }
-    );
+    if (image) {
+      this.setState(
+        prevState => ({
+          images: [...prevState.images, image]
+        }),
+        () => {
+          target.value = '';
+        }
+      );
+    } else {
+      console.error('image is null in handleImageSelected');
+    }
   };
 
   handleImageRemove = imageIndex => {
@@ -83,30 +107,36 @@ class EditorContainer extends React.Component {
   };
 
   handleSave = () => {
-    const { dispatchUpdateNote, match } = this.props;
+    const { dispatchSave, createdOn, history } = this.props;
     const { title, content, images, attachments } = this.state;
 
-    dispatchUpdateNote(title, content);
-    noteStore
-      .set(match.params.id, {
-        id: match.params.id,
-        title,
-        content,
-        images,
-        attachments
-      })
-      .then(() => this.props.history.goBack());
+    dispatchSave(title, content, images, attachments, createdOn);
+
+    history.goBack();
+  };
+
+  handleDelete = () => {
+    const { history, match } = this.props;
+    this.props.dispatchRemove(match.params.id);
+    history.goBack();
   };
 
   componentWillMount() {
-    noteStore.get(this.props.match.params.id).then(note => {
-      this.setState(note);
-    });
+    if (this.props.isNew === false) {
+      noteStore.get(this.props.match.params.id).then(note => {
+        const { images, attachments } = note;
+        this.setState({
+          images,
+          attachments
+        });
+      });
+    }
   }
 
   render() {
     return (
       <EditorView
+        isNew={this.props.isNew}
         menuAnchor={this.state.menuAnchorEl}
         images={this.state.images}
         attachments={this.state.attachments}
@@ -120,26 +150,54 @@ class EditorContainer extends React.Component {
         onFileSelected={this.handleFileSelected}
         onFileRemove={this.handleFileRemove}
         onSave={this.handleSave}
+        onDelete={this.handleDelete}
       />
     );
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { title, content } = state.note.data.find(
-    note => note.id === ownProps.match.params.id
-  );
+  const note = state.note.data.find(note => note.id === ownProps.match.params.id);
 
-  return {
-    title,
-    content
-  };
+  if (note) {
+    return {
+      isNew: false,
+      title: note.title,
+      content: note.content,
+      createdOn: note.createdOn
+    };
+  } else {
+    return {
+      isNew: true
+    };
+  }
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  dispatchUpdateNote(title, content) {
-    dispatch(updateNote(Number(ownProps.match.params.id), title, content));
+const mapDispatchToProps = (dispatch, ownProps) => {
+  if (ownProps.location.pathname === '/note/add') {
+    return {
+      dispatchSave(title, content, images, attachments) {
+        dispatch(initAddNote(title, content, images, attachments));
+      }
+    };
   }
-});
+  return {
+    dispatchSave(title, content, images, attachments, createdOn) {
+      dispatch(
+        initUpdateNote(
+          ownProps.match.params.id,
+          createdOn,
+          title,
+          content,
+          images,
+          attachments
+        )
+      );
+    },
+    dispatchRemove(id) {
+      dispatch(initRemoveNote(id));
+    }
+  };
+};
 
 export const Editor = connect(mapStateToProps, mapDispatchToProps)(EditorContainer);
