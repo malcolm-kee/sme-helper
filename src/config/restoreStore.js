@@ -8,7 +8,10 @@ export const restoreStore = store => {
       const notes = rawNotes.map(rawNote => ({
         id: rawNote.id,
         title: rawNote.title,
-        content: rawNote.content
+        content: rawNote.content,
+        hasImage: rawNote.images && rawNote.images.length > 0 ? true : false,
+        hasAttachment:
+          rawNote.attachments && rawNote.attachments.length > 0 ? true : false
       }));
       store.dispatch(setNotes(notes));
     })

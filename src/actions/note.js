@@ -3,7 +3,7 @@ import { NOTE_ACTION_TYPE } from '../constants';
 import { noteStore } from '../services/db';
 
 /**
- * @typedef {{id: string, title: string, content: string}} Note
+ * @typedef {{id: string, title: string, content: string, hasImage: boolean, hasAttachment: boolean }} Note
  */
 
 /**
@@ -65,6 +65,8 @@ export const initAddNote = (title, content, images, attachments) => dispatch => 
       addNote({
         id: note.id,
         createdOn: note.createdOn,
+        hasImage: images && images.length > 0,
+        hasAttachment: attachments && attachments.length > 0,
         title,
         content
       })
@@ -97,7 +99,17 @@ export const initUpdateNote = (
       images,
       attachments
     })
-    .then(() => dispatch(updateNote(id, title, content)));
+    .then(() =>
+      dispatch(
+        updateNote({
+          id,
+          title,
+          content,
+          hasAttachment: attachments && attachments.length > 0,
+          hasImage: images && images.length > 0
+        })
+      )
+    );
 };
 
 /**

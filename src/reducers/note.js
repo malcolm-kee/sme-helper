@@ -15,17 +15,10 @@ const addNote = (state, action) => ({
 });
 
 const updateNote = (state, action) => {
-  const { id, title, content } = action.payload;
+  const updatedNote = action.payload;
   return {
     ...state,
-    data: state.data.map(note => {
-      if (note.id !== id) return note;
-      return {
-        id,
-        title,
-        content
-      };
-    })
+    data: state.data.map(note => (note.id !== updatedNote.id ? note : updatedNote))
   };
 };
 

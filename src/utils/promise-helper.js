@@ -7,6 +7,12 @@ export function dataUrlToArrayBuffer(dataURI) {
   return ia.buffer;
 }
 
+export function fileToUrl(file) {
+  const url = window.URL || window.webkitURL;
+
+  return url.createObjectURL(file);
+}
+
 export async function canvasToBlob(canvas, type) {
   if (canvas.toBlob) {
     const result = new Promise(resolve => {

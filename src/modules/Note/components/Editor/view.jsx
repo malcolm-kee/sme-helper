@@ -1,28 +1,26 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
+import Avatar from 'material-ui/Avatar';
+import Dialog from 'material-ui/Dialog';
 import Divider from 'material-ui/Divider';
+import { FormControl } from 'material-ui/Form';
 import IconButton from 'material-ui/IconButton';
 import Icon from 'material-ui/Icon';
+import Input from 'material-ui/Input';
 import List, {
   ListItem,
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText
 } from 'material-ui/List';
-
 import Menu, { MenuItem } from 'material-ui/Menu';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 
-import './style.css';
-
-// import { constants } from './constants';
-// const { SUPPORTS_MEDIA_DEVICES } = constants;
-
 import { StackedPage } from '../../../../components/StackedPage';
-import { ContentEditable } from '../../../../components/ContentEditable';
 import { reduce } from '../../../../utils/fp';
+import { fileToUrl } from '../../../../utils/promise-helper';
 
 const decorate = withStyles(theme => {
   const root = {
@@ -32,9 +30,12 @@ const decorate = withStyles(theme => {
   };
 
   const content = {
-    flex: 1,
     marginLeft: theme.spacing.unit * 2,
     marginRight: theme.spacing.unit * 2
+  };
+
+  const contentWrapper = {
+    flex: 1
   };
 
   const button = {
@@ -43,7 +44,6 @@ const decorate = withStyles(theme => {
 
   const title = {
     fontSize: theme.typography.title.fontSize,
-    borderBottom: `1px solid ${theme.palette.grey['300']}`,
     marginTop: theme.spacing.unit * 2,
     marginLeft: theme.spacing.unit * 2,
     marginRight: theme.spacing.unit * 2
@@ -67,15 +67,28 @@ const decorate = withStyles(theme => {
     flex: 0
   };
 
+  const focusedImageContainer = {
+    maxWidth: '100vw',
+    maxHeight: '100vh'
+  };
+
+  const focusedImage = {
+    width: '100%',
+    height: 'auto'
+  };
+
   return {
     content,
+    contentWrapper,
     root,
     button,
     title,
     btmToolbar,
     fileInput,
     fileList,
-    listItemText
+    listItemText,
+    focusedImageContainer,
+    focusedImage
   };
 });
 
@@ -87,6 +100,7 @@ export const EditorView = decorate(
     attachments,
     title,
     content,
+    focusedImage,
     openMenu,
     closeMenu,
     onContentChange,
@@ -94,6 +108,8 @@ export const EditorView = decorate(
     onImageRemove,
     onFileSelected,
     onFileRemove,
+    onImageOpen,
+    onImageClose,
     onSave,
     onDelete,
     classes
@@ -105,28 +121,42 @@ export const EditorView = decorate(
       onRightButtonClick={onDelete}
     >
       <div className={`Note--Editor ${classes.root}`}>
-        <ContentEditable
-          className={`title ${classes.title}`}
-          name="title"
-          html={title}
-          onChange={onContentChange}
-        />
-        <ContentEditable
-          className={`content ${classes.content}`}
-          name="content"
-          html={content}
-          onChange={onContentChange}
-        />
+        <FormControl fullWidth>
+          <Input
+            placeholder="Title"
+            name="title"
+            value={title}
+            onChange={onContentChange}
+            className={classes.title}
+          />
+        </FormControl>
+        <div className={classes.contentWrapper}>
+          <FormControl fullWidth>
+            <Input
+              placeholder="Write your note here."
+              name="content"
+              value={content}
+              onChange={onContentChange}
+              className={classes.content}
+              multiline
+              disableUnderline
+            />
+          </FormControl>
+        </div>
         <List className={classes.fileList}>
           {images && images.length > 0
             ? reduce(
                 images,
                 (acc, image, index) => [
                   ...acc,
-                  <Divider key={`imageDivi-${index}`} />,
-                  <ListItem key={`imageItem-${index}`}>
+                  <Divider key={`imageDivi-${image.id}`} />,
+                  <ListItem
+                    button
+                    onClick={() => onImageOpen(index)}
+                    key={`imageItem-${image.id}`}
+                  >
                     <ListItemIcon>
-                      <Icon>image</Icon>
+                      <Avatar src={fileToUrl(image)} />
                     </ListItemIcon>
                     <ListItemText primary={image.name} />
                     <ListItemSecondaryAction>
@@ -144,8 +174,8 @@ export const EditorView = decorate(
                 attachments,
                 (acc, attachment, index) => [
                   ...acc,
-                  <Divider key={`divi-${index}`} />,
-                  <ListItem key={`item-${index}`}>
+                  <Divider key={`divi-${attachment.id}`} />,
+                  <ListItem key={`item-${attachment.id}`}>
                     <ListItemIcon>
                       <Icon>attach_file</Icon>
                     </ListItemIcon>
@@ -161,6 +191,17 @@ export const EditorView = decorate(
               )
             : null}
         </List>
+        <Dialog open={focusedImage !== null} onClose={onImageClose}>
+          {focusedImage !== null ? (
+            <div className={classes.focusedImageContainer}>
+              <img
+                alt={images[focusedImage].name}
+                src={fileToUrl(images[focusedImage])}
+                className={classes.focusedImage}
+              />
+            </div>
+          ) : null}
+        </Dialog>
         <input
           type="file"
           name="photo"

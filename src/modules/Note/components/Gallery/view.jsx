@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { withStyles } from 'material-ui/styles';
+import Avatar from 'material-ui/Avatar';
 import Button from 'material-ui/Button';
 import Dialog, { DialogTitle, DialogContent } from 'material-ui/Dialog';
-import Card, { CardContent } from 'material-ui/Card';
+import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Icon from 'material-ui/Icon';
 import Typography from 'material-ui/Typography';
 
@@ -39,12 +40,23 @@ const decorate = withStyles(theme => {
     right: theme.spacing.unit * 2
   };
 
+  const contentTagContainer = {
+    width: theme.spacing.unit * 3,
+    height: theme.spacing.unit * 3
+  };
+
+  const contentTag = {
+    fontSize: theme.typography.body1.fontSize
+  };
+
   return {
     container,
     card,
     cardContent,
     noteContent,
-    addButton
+    addButton,
+    contentTag,
+    contentTagContainer
   };
 });
 
@@ -57,6 +69,18 @@ export const GalleryView = decorate(
             <Typography type="headline">{note.title}</Typography>
             <Typography className={classes.noteContent}>{note.content}</Typography>
           </CardContent>
+          <CardActions>
+            {note.hasAttachment ? (
+              <Avatar className={classes.contentTagContainer}>
+                <Icon className={classes.contentTag}>attach_file</Icon>
+              </Avatar>
+            ) : null}
+            {note.hasImage ? (
+              <Avatar className={classes.contentTagContainer}>
+                <Icon className={classes.contentTag}>photo</Icon>
+              </Avatar>
+            ) : null}
+          </CardActions>
         </Card>
       ))}
       <Button

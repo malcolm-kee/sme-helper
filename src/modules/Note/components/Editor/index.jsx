@@ -31,7 +31,8 @@ class EditorContainer extends React.Component {
     attachments: [],
     title: this.props.title,
     content: this.props.content,
-    menuAnchorEl: null
+    menuAnchorEl: null,
+    focusedImage: null
   };
 
   handleOpenMenu = ev => {
@@ -98,6 +99,14 @@ class EditorContainer extends React.Component {
     }));
   };
 
+  handleOpenImage = imageIndex => {
+    this.setState({ focusedImage: imageIndex });
+  };
+
+  handleCloseImage = () => {
+    this.setState({ focusedImage: null });
+  };
+
   handleContentChange = e => {
     const { name, value } = e.target;
 
@@ -142,6 +151,7 @@ class EditorContainer extends React.Component {
         attachments={this.state.attachments}
         title={this.state.title}
         content={this.state.content}
+        focusedImage={this.state.focusedImage}
         openMenu={this.handleOpenMenu}
         closeMenu={this.handleCloseMenu}
         onContentChange={this.handleContentChange}
@@ -149,6 +159,8 @@ class EditorContainer extends React.Component {
         onImageRemove={this.handleImageRemove}
         onFileSelected={this.handleFileSelected}
         onFileRemove={this.handleFileRemove}
+        onImageOpen={this.handleOpenImage}
+        onImageClose={this.handleCloseImage}
         onSave={this.handleSave}
         onDelete={this.handleDelete}
       />
