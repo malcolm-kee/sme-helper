@@ -192,15 +192,15 @@ export const EditorView = decorate(
             : null}
         </List>
         <Dialog open={focusedImage !== null} onClose={onImageClose}>
-          {focusedImage !== null ? (
-            <div className={classes.focusedImageContainer}>
+          <div className={classes.focusedImageContainer}>
+            {focusedImage !== null ? (
               <img
                 alt={images[focusedImage].name}
                 src={fileToUrl(images[focusedImage])}
                 className={classes.focusedImage}
               />
-            </div>
-          ) : null}
+            ) : null}
+          </div>
         </Dialog>
         <input
           type="file"

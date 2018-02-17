@@ -8,7 +8,7 @@ import AwesomeDetails from './components/AwesomeDetails';
 import NotSoAwesomeDetails from './components/NotSoAwesomeDetails';
 import { AwesomeForm } from './components/AwesomeForm';
 
-const Overview = () => (
+export const Overview = () => (
   <DrawerNavigator navTitle="Overview">
     <Switch>
       <Route exact path="/overview/details" component={AwesomeDetails} />

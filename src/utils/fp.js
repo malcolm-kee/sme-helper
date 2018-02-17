@@ -11,12 +11,11 @@
  */
 
 /**
- * @param {Function[]} fns
- * @returns {undefined}
+ * @returns {Function}
  */
-export const compose = (...fns) => () => {
+export const compose = (...fns) => (...params) => {
   fns.forEach(fn => {
-    if (typeof fn === 'function') fn();
+    if (typeof fn === 'function') fn(...params);
   });
 };
 
@@ -27,7 +26,7 @@ export const compose = (...fns) => () => {
  */
 export const forEach = (arr, callBack) => {
   for (let x = 0; x < arr.length; x++) {
-    callBack(arr[x], x);
+    callBack(arr[x], x, arr);
   }
 };
 
@@ -37,9 +36,11 @@ export const forEach = (arr, callBack) => {
  * @param {generalCallback} callBack
  */
 export const map = (arr, callBack) => {
+  let result = [];
   for (let x = 0; x < arr.length; x++) {
-    return callBack(arr[x], x);
+    result.push(callBack(arr[x], x, arr));
   }
+  return result;
 };
 
 export const reduce = (arr, callBack, initialVal) => {

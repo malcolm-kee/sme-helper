@@ -15,5 +15,5 @@ export const restoreStore = store => {
       }));
       store.dispatch(setNotes(notes));
     })
-    .catch(err => console.error('no noteStore'));
+    .catch(err => console.log('no noteStore', err));
 };
