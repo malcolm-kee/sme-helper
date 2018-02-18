@@ -120,7 +120,7 @@ const RegisterForm = ({
             />
           </FormControl>
           <Button
-            raised
+            variant="raised"
             fullWidth
             color="primary"
             className={classes.button}

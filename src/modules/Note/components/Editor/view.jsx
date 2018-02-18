@@ -14,9 +14,9 @@ import List, {
   ListItemSecondaryAction,
   ListItemText
 } from 'material-ui/List';
-import Menu, { MenuItem } from 'material-ui/Menu';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
+import Collapse from 'material-ui/transitions/Collapse';
 
 import { StackedPage } from '../../../../components/StackedPage';
 import { reduce } from '../../../../utils/fp';
@@ -30,12 +30,14 @@ const decorate = withStyles(theme => {
   };
 
   const content = {
+    flex: 1,
     marginLeft: theme.spacing.unit * 2,
     marginRight: theme.spacing.unit * 2
   };
 
   const contentWrapper = {
-    flex: 1
+    flex: 1,
+    display: 'flex'
   };
 
   const button = {
@@ -95,15 +97,18 @@ const decorate = withStyles(theme => {
 export const EditorView = decorate(
   ({
     isNew,
-    menuAnchor,
+    showMenu,
     images,
     attachments,
     title,
     content,
     focusedImage,
-    openMenu,
+    setContentRef,
     closeMenu,
-    onContentChange,
+    toggleMenu,
+    onClickRoot,
+    onInputChange,
+    onContentClick,
     onImageSelected,
     onImageRemove,
     onFileSelected,
@@ -120,26 +125,27 @@ export const EditorView = decorate(
       rightButtonIcon="delete"
       onRightButtonClick={onDelete}
     >
-      <div className={`Note--Editor ${classes.root}`}>
+      <div className={`Note--Editor ${classes.root}`} onClick={onClickRoot}>
         <FormControl fullWidth>
           <Input
             placeholder="Title"
             name="title"
             value={title}
-            onChange={onContentChange}
+            onChange={onInputChange}
             className={classes.title}
           />
         </FormControl>
-        <div className={classes.contentWrapper}>
+        <div className={classes.contentWrapper} onClick={onContentClick}>
           <FormControl fullWidth>
             <Input
               placeholder="Write your note here."
               name="content"
               value={content}
-              onChange={onContentChange}
+              onChange={onInputChange}
               className={classes.content}
               multiline
               disableUnderline
+              inputRef={setContentRef}
             />
           </FormControl>
         </div>
@@ -191,6 +197,35 @@ export const EditorView = decorate(
               )
             : null}
         </List>
+        <Collapse in={showMenu}>
+          <List disablePadding>
+            <Divider />
+            <ListItem>
+              <ListItemIcon color="primary" className={classes.button}>
+                <Icon>image</Icon>
+              </ListItemIcon>
+              <Typography
+                component="label"
+                htmlFor="Note--photo"
+                className={classes.listItemText}
+              >
+                Take Photo
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon color="primary" className={classes.button}>
+                <Icon>attach_file</Icon>
+              </ListItemIcon>
+              <Typography
+                component="label"
+                htmlFor="Note--attachment"
+                className={classes.listItemText}
+              >
+                Attach File
+              </Typography>
+            </ListItem>
+          </List>
+        </Collapse>
         <Dialog open={focusedImage !== null} onClose={onImageClose}>
           <div className={classes.focusedImageContainer}>
             {focusedImage !== null ? (
@@ -221,40 +256,9 @@ export const EditorView = decorate(
         />
         <AppBar position="static" color="default">
           <Toolbar className={classes.btmToolbar}>
-            <IconButton color="primary" onClick={openMenu} className={classes.button}>
+            <IconButton color="primary" onClick={toggleMenu} className={classes.button}>
               <Icon>add_box</Icon>
             </IconButton>
-            <Menu
-              open={Boolean(menuAnchor)}
-              anchorEl={menuAnchor}
-              onClose={closeMenu}
-              transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            >
-              <MenuItem onClick={closeMenu}>
-                <ListItemIcon color="primary" className={classes.button}>
-                  <Icon>image</Icon>
-                </ListItemIcon>
-                <Typography
-                  component="label"
-                  htmlFor="Note--photo"
-                  className={classes.listItemText}
-                >
-                  Add Image
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={closeMenu}>
-                <ListItemIcon color="primary" className={classes.button}>
-                  <Icon>attach_file</Icon>
-                </ListItemIcon>
-                <Typography
-                  component="label"
-                  htmlFor="Note--attachment"
-                  className={classes.listItemText}
-                >
-                  Attach File
-                </Typography>
-              </MenuItem>
-            </Menu>
             <IconButton onClick={onSave} color="primary" className={classes.button}>
               <Icon>save</Icon>
             </IconButton>

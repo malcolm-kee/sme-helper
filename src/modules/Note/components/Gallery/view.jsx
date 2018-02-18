@@ -86,8 +86,7 @@ export const GalleryView = decorate(
       <Button
         component={Link}
         color="primary"
-        fab
-        raised
+        variant="fab"
         to="/note/add"
         className={classes.addButton}
       >

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Icon } from 'material-ui';
+import Button from 'material-ui/Button';
+import Icon from 'material-ui/Icon';
 import { withStyles, withTheme } from 'material-ui/styles';
 import { Zoom } from 'material-ui/transitions';
 
@@ -54,11 +55,7 @@ const PreloginLanding = ({ classes, theme, pageLoaded }) => (
       <Carousel>
         <div className={classes.marketingContentCenter}>
           <h1>Welcome to</h1>
-          <Zoom
-            in={pageLoaded}
-            enterDelay={theme.transitions.duration.enteringScreen}
-            timeout={theme.transitions.duration.complex}
-          >
+          <Zoom in={pageLoaded} timeout={theme.transitions.duration.complex}>
             <h1 style={theme.typography.display3}>SME Helper</h1>
           </Zoom>
         </div>
@@ -93,11 +90,17 @@ const PreloginLanding = ({ classes, theme, pageLoaded }) => (
       </Carousel>
     </div>
     <div className={classes.actionPanel}>
-      <Button raised fullWidth component={Link} to="/register" className={classes.button}>
+      <Button
+        variant="raised"
+        fullWidth
+        component={Link}
+        to="/register"
+        className={classes.button}
+      >
         Sign Up
       </Button>
       <Button
-        raised
+        variant="raised"
         fullWidth
         component={Link}
         to="/login"

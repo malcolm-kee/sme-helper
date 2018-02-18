@@ -77,7 +77,7 @@ const LoginForm = ({
             />
           </FormControl>
           <Button
-            raised
+            variant="raised"
             fullWidth
             color="primary"
             className={classes.button}

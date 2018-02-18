@@ -31,20 +31,27 @@ class EditorContainer extends React.Component {
     attachments: [],
     title: this.props.title,
     content: this.props.content,
-    menuAnchorEl: null,
+    showMenu: false,
     focusedImage: null
   };
 
-  handleOpenMenu = ev => {
+  handleClickRoot = ev => {
+    if (this.state.showMenu) {
+      this.setState({ showMenu: false });
+    }
+  };
+
+  handleCloseMenu = ev => {
+    ev.preventDefault();
+    ev.stopPropagation();
     this.setState({
-      menuAnchorEl: ev.currentTarget
+      showMenu: false
     });
   };
 
-  handleCloseMenu = () => {
-    this.setState({
-      menuAnchorEl: null
-    });
+  handleToggleMenu = ev => {
+    ev.stopPropagation();
+    this.setState(prevState => ({ showMenu: !prevState.showMenu }));
   };
 
   handleFileSelected = ev => {
@@ -107,12 +114,18 @@ class EditorContainer extends React.Component {
     this.setState({ focusedImage: null });
   };
 
-  handleContentChange = e => {
+  handleInputChange = e => {
     const { name, value } = e.target;
 
     this.setState({
       [name]: value
     });
+  };
+
+  setContentRef = ref => (this.contentRef = ref);
+
+  handleContentClick = () => {
+    this.contentRef.focus();
   };
 
   handleSave = () => {
@@ -146,15 +159,18 @@ class EditorContainer extends React.Component {
     return (
       <EditorView
         isNew={this.props.isNew}
-        menuAnchor={this.state.menuAnchorEl}
+        showMenu={this.state.showMenu}
         images={this.state.images}
         attachments={this.state.attachments}
         title={this.state.title}
         content={this.state.content}
         focusedImage={this.state.focusedImage}
-        openMenu={this.handleOpenMenu}
+        setContentRef={this.setContentRef}
         closeMenu={this.handleCloseMenu}
-        onContentChange={this.handleContentChange}
+        toggleMenu={this.handleToggleMenu}
+        onClickRoot={this.handleClickRoot}
+        onInputChange={this.handleInputChange}
+        onContentClick={this.handleContentClick}
         onImageSelected={this.handleImageSelected}
         onImageRemove={this.handleImageRemove}
         onFileSelected={this.handleFileSelected}
