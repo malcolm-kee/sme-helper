@@ -122,8 +122,8 @@ export const EditorView = decorate(
     <StackedPage
       navTitle={isNew ? 'Add Note' : 'Edit Note'}
       rightButton={true}
-      rightButtonIcon="delete"
-      onRightButtonClick={onDelete}
+      rightButtonText="SAVE"
+      onRightButtonClick={onSave}
     >
       <div className={`Note--Editor ${classes.root}`} onClick={onClickRoot}>
         <FormControl fullWidth>
@@ -259,8 +259,8 @@ export const EditorView = decorate(
             <IconButton color="primary" onClick={toggleMenu} className={classes.button}>
               <Icon>add_box</Icon>
             </IconButton>
-            <IconButton onClick={onSave} color="primary" className={classes.button}>
-              <Icon>save</Icon>
+            <IconButton onClick={onDelete} color="primary" className={classes.button}>
+              <Icon>delete</Icon>
             </IconButton>
           </Toolbar>
         </AppBar>

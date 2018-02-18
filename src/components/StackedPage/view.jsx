@@ -26,6 +26,7 @@ const StackedPage = ({
   children,
   onBack,
   rightButton,
+  rightButtonText,
   rightButtonIcon,
   onRightButtonClick
 }) => (
@@ -35,6 +36,7 @@ const StackedPage = ({
       backButton={true}
       onButtonClick={onBack}
       rightButton={rightButton}
+      rightButtonText={rightButtonText}
       rightButtonIcon={rightButtonIcon}
       onRightButtonClick={onRightButtonClick}
     />

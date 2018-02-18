@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { AppBar, Icon, IconButton, Toolbar, Typography } from 'material-ui';
 import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
 
 const styles = theme => ({
   title: {
@@ -24,6 +25,7 @@ const Header = ({
   backButton,
   rightButton,
   rightButtonIcon,
+  rightButtonText,
   onRightButtonClick
 }) => {
   let rightSection;
@@ -32,12 +34,22 @@ const Header = ({
     if (rightButtonIcon) {
       rightSection = (
         <IconButton
-          className={classes.menuButton}
+          className={classes.rightButton}
           onClick={onRightButtonClick}
           color="inherit"
         >
           <Icon>{rightButtonIcon}</Icon>
         </IconButton>
+      );
+    } else if (rightButtonText) {
+      rightSection = (
+        <Button
+          onClick={onRightButtonClick}
+          color="inherit"
+          className={classes.rightButton}
+        >
+          {rightButtonText}
+        </Button>
       );
     }
   } else {
@@ -68,6 +80,7 @@ Header.propTypes = {
   title: PropTypes.string,
   backButton: PropTypes.bool,
   rightButton: PropTypes.bool,
+  rightButtonText: PropTypes.string,
   rightButtonIcon: PropTypes.string,
   onRightButtonClick: PropTypes.func
 };
