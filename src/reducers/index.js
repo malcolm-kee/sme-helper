@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
 
-import authReducer from './auth';
+import { authReducer, selectUserData } from './auth';
 import { noteReducer } from './note';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   auth: authReducer,
   note: noteReducer
 });
 
-export default rootReducer;
+/* Selector */
+export const selectUser = state => selectUserData(state.auth);

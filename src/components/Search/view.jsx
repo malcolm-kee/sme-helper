@@ -137,6 +137,7 @@ export const SearchView = withStyles(styles)(({ classes, onBack }) => (
           <div>
             <Toolbar>
               {renderTextInput({
+                type: 'search',
                 fullWidth: true,
                 disableUnderline: true,
                 InputProps: getInputProps({

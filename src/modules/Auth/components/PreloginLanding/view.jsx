@@ -1,11 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Button from 'material-ui/Button';
-import Icon from 'material-ui/Icon';
 import { withStyles, withTheme } from 'material-ui/styles';
 import { Zoom } from 'material-ui/transitions';
-
-import Carousel from '../../../../components/Carousel';
 
 const styles = theme => ({
   root: {
@@ -27,6 +23,7 @@ const styles = theme => ({
   },
   marketingContentCenter: {
     display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -49,61 +46,35 @@ const styles = theme => ({
   }
 });
 
-const PreloginLanding = ({ classes, theme, pageLoaded }) => (
+const PreloginLanding = ({
+  classes,
+  theme,
+  pageLoaded,
+  onSignInClick,
+  onSignOutClick
+}) => (
   <div className={classes.root}>
     <div className={classes.slider}>
-      <Carousel>
-        <div className={classes.marketingContentCenter}>
-          <h1>Welcome to</h1>
-          <Zoom in={pageLoaded} timeout={theme.transitions.duration.complex}>
-            <h1 style={theme.typography.display3}>SME Helper</h1>
-          </Zoom>
-        </div>
-        <div className={classes.marketingContentLeft}>
-          <div>
-            <Icon style={{ fontSize: theme.typography.display2.fontSize }}>event</Icon>
-          </div>
-          <h1>Remember your booking</h1>
-        </div>
-        <div className={classes.marketingContentRight}>
-          <div>
-            <Icon style={{ fontSize: theme.typography.display2.fontSize }}>print</Icon>
-          </div>
-          <h1>Generate the invoice</h1>
-        </div>
-        <div className={classes.marketingContentLeft}>
-          <div>
-            <Icon style={{ fontSize: theme.typography.display2.fontSize }}>
-              announcement
-            </Icon>
-          </div>
-          <h1>Notify you of important stuffs</h1>
-        </div>
-        <div className={classes.marketingContentRight}>
-          <div>
-            <Icon style={{ fontSize: theme.typography.display2.fontSize }}>
-              trending_up
-            </Icon>
-          </div>
-          <h1>Timely and awesome analytics</h1>
-        </div>
-      </Carousel>
+      <div className={classes.marketingContentCenter}>
+        <h1>Welcome to</h1>
+        <Zoom in={pageLoaded} timeout={theme.transitions.duration.complex}>
+          <h1 style={theme.typography.display3}>SME Helper</h1>
+        </Zoom>
+      </div>
     </div>
     <div className={classes.actionPanel}>
       <Button
+        onClick={onSignOutClick}
         variant="raised"
         fullWidth
-        component={Link}
-        to="/register"
         className={classes.button}
       >
-        Sign Up
+        Sign Out
       </Button>
       <Button
+        onClick={onSignInClick}
         variant="raised"
         fullWidth
-        component={Link}
-        to="/login"
         color="primary"
         className={classes.button}
       >

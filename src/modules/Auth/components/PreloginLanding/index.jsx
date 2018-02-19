@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { signInGoogle, signOut } from '../../../../services/firebase';
 import PreloginLanding from './view';
 
 class PreloginLandingContainer extends React.Component {
@@ -13,8 +14,22 @@ class PreloginLandingContainer extends React.Component {
     }, 500);
   }
 
+  handleSignInClick = () => {
+    signInGoogle();
+  };
+
+  handleSignOutClick = () => {
+    signOut();
+  };
+
   render() {
-    return <PreloginLanding pageLoaded={this.state.pageLoaded} />;
+    return (
+      <PreloginLanding
+        pageLoaded={this.state.pageLoaded}
+        onSignInClick={this.handleSignInClick}
+        onSignOutClick={this.handleSignOutClick}
+      />
+    );
   }
 }
 

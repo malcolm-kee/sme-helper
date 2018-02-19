@@ -6,11 +6,8 @@ import { Reboot } from 'material-ui';
 import configureStore from './config/configureStore';
 import { restoreStore } from './config/restoreStore';
 import asyncComponent from './components/AsyncComponent';
+import { AuthListener } from './components/AuthListener';
 
-const LoginForm = asyncComponent(() => import('./modules/Auth/components/LoginForm'));
-const RegisterForm = asyncComponent(() =>
-  import('./modules/Auth/components/RegisterForm')
-);
 const PreloginLanding = asyncComponent(() =>
   import('./modules/Auth/components/PreloginLanding')
 );
@@ -24,16 +21,20 @@ restoreStore(store);
 
 const RootRouter = () => (
   <Provider store={store}>
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/register" component={RegisterForm} />
-        <Route exact path="/login" component={LoginForm} />
-        <Route exact path="/search" component={Search} />
-        <Route path="/note" component={Note} />
-        <Route path="/overview" component={Overview} />
-        <Route path="/" component={PreloginLanding} />
-      </Switch>
-    </BrowserRouter>
+    <div>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/search" component={Search} />
+          <Route path="/note" component={Note} />
+          <Route path="/overview" component={Overview} />
+          <Route path="/" component={PreloginLanding} />
+        </Switch>
+      </BrowserRouter>
+      <AuthListener
+        onLogin={user => console.log('login in App', user)}
+        onLogout={() => console.log('logout in App')}
+      />
+    </div>
   </Provider>
 );
 

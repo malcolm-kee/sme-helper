@@ -1,5 +1,8 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton';
 
 import Header from '../Header';
 
@@ -35,10 +38,20 @@ const StackedPage = ({
       title={navTitle}
       backButton={true}
       onButtonClick={onBack}
-      rightButton={rightButton}
-      rightButtonText={rightButtonText}
-      rightButtonIcon={rightButtonIcon}
-      onRightButtonClick={onRightButtonClick}
+      renderRightSection={() => {
+        if (rightButton) {
+          return rightButtonText ? (
+            <Button onClick={onRightButtonClick} color="inherit">
+              {rightButtonText}
+            </Button>
+          ) : (
+            <IconButton onClick={onRightButtonClick} color="inherit">
+              <Icon>{rightButtonIcon}</Icon>
+            </IconButton>
+          );
+        }
+        return null;
+      }}
     />
     <div className={classes.content}>{children}</div>
   </div>

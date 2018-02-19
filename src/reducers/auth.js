@@ -2,11 +2,13 @@ import { AUTH_STATE, AUTH_ACTION_TYPE } from '../constants';
 
 const DEFAULT_STATE = {
   status: AUTH_STATE.ANONYMOUS,
-  userEmail: '',
+  userName: '',
+  userEmail: null,
+  userPhoto: null,
   errorMsg: ''
 };
 
-const authReducer = (state = DEFAULT_STATE, action) => {
+export const authReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case AUTH_ACTION_TYPE.ATTEMPTING_LOGIN:
     case AUTH_ACTION_TYPE.ATTEMPTING_LOGOUT:
@@ -20,7 +22,9 @@ const authReducer = (state = DEFAULT_STATE, action) => {
       return {
         ...state,
         status: AUTH_STATE.LOGGED_IN,
-        userEmail: action.payload
+        userName: action.payload.displayName,
+        userEmail: action.payload.email,
+        userPhoto: action.payload.photoURL
       };
 
     case AUTH_ACTION_TYPE.LOGIN_FAILED:
@@ -34,7 +38,9 @@ const authReducer = (state = DEFAULT_STATE, action) => {
       return {
         ...state,
         status: AUTH_STATE.ANONYMOUS,
-        userEmail: ''
+        userName: '',
+        userEmail: null,
+        userPhoto: null
       };
 
     case AUTH_ACTION_TYPE.LOGOUT_FAILED:
@@ -49,4 +55,8 @@ const authReducer = (state = DEFAULT_STATE, action) => {
   }
 };
 
-export default authReducer;
+export const selectUserData = authState => ({
+  name: authState.userName,
+  email: authState.userEmail,
+  photo: authState.userPhoto
+});
