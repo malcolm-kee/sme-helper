@@ -22,8 +22,10 @@ class AuthListenerContainer extends React.Component {
   onAuthChange = user => {
     const { onLogin, onLogout } = this.props;
     if (user) {
+      console.log('onAuthChange with user and onLogin', user, onLogin);
       onLogin(user);
     } else {
+      console.log('onAuthChange without user');
       onLogout();
     }
   };

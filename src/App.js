@@ -30,10 +30,7 @@ const RootRouter = () => (
           <Route path="/" component={PreloginLanding} />
         </Switch>
       </BrowserRouter>
-      <AuthListener
-        onLogin={user => console.log('login in App', user)}
-        onLogout={() => console.log('logout in App')}
-      />
+      <AuthListener />
     </div>
   </Provider>
 );
