@@ -1,31 +1,17 @@
 import React from 'react';
 import { canvasToBlob } from '../utils/promise-helper';
 
-const createEventListener = canvas => e => {
-  if (e.target === canvas) {
-    e.preventDefault();
-  }
-};
-
-const setUpForCanvas = eventListener => {
-  // Prevent scrolling when touching the canvas
-  // document.body.addEventListener('touchstart', eventListener, false);
-  // document.body.addEventListener('touchend', eventListener, false);
-  // document.body.addEventListener('touchmove', eventListener, false);
+const setUpForCanvas = () => {
   document.body.style.touchAction = 'none';
 };
 
-const cleanUpCanvas = eventListener => {
-  // document.body.removeEventListener('touchstart', eventListener, false);
-  // document.body.removeEventListener('touchend', eventListener, false);
-  // document.body.removeEventListener('touchmove', eventListener, false);
+const cleanUpCanvas = () => {
   document.body.style.touchAction = null;
 };
 
 class HandWriteCanvasContainer extends React.Component {
   canvasRef = React.createRef();
   ctx = null;
-  eventListener = null;
   lastX = 0;
   lastY = 0;
 
@@ -89,8 +75,7 @@ class HandWriteCanvasContainer extends React.Component {
   };
 
   componentDidMount() {
-    this.eventListener = createEventListener(this.canvasRef);
-    setUpForCanvas(this.eventListener);
+    setUpForCanvas();
     this.canvasRef.width = window.innerWidth - 50;
     this.canvasRef.height = window.innerHeight - 100;
     this.ctx = this.canvasRef.getContext('2d');
