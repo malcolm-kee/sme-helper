@@ -10,7 +10,11 @@ export function dataUrlToArrayBuffer(dataURI) {
 export function fileToUrl(file) {
   const url = window.URL || window.webkitURL;
 
-  return url.createObjectURL(file);
+  try {
+    return url.createObjectURL(file);
+  } catch (e) {
+    return '';
+  }
 }
 
 export async function canvasToBlob(canvas, type) {

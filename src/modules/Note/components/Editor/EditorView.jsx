@@ -21,6 +21,7 @@ import Collapse from 'material-ui/transitions/Collapse';
 import { StackedPage } from '../../../../components/StackedPage';
 import { reduce } from '../../../../utils/fp';
 import { fileToUrl } from '../../../../utils/promise-helper';
+import { NoteHandWriteEditor } from '../NoteHandWriteEditor';
 
 const decorate = withStyles(theme => {
   const root = {
@@ -98,6 +99,7 @@ export const EditorView = decorate(
   ({
     isNew,
     showMenu,
+    showCanvas,
     images,
     attachments,
     title,
@@ -109,6 +111,8 @@ export const EditorView = decorate(
     onClickRoot,
     onInputChange,
     onContentClick,
+    onCanvasToggle,
+    onCanvasSave,
     onImageSelected,
     onImageRemove,
     onFileSelected,
@@ -200,28 +204,24 @@ export const EditorView = decorate(
         <Collapse in={showMenu}>
           <List disablePadding>
             <Divider />
-            <ListItem>
+            <ListItem component="label" htmlFor="Note--photo" button>
               <ListItemIcon color="primary" className={classes.button}>
                 <Icon>image</Icon>
               </ListItemIcon>
-              <Typography
-                component="label"
-                htmlFor="Note--photo"
-                className={classes.listItemText}
-              >
-                Take Photo
-              </Typography>
+              <Typography className={classes.listItemText}>Take Photo</Typography>
             </ListItem>
-            <ListItem>
+            <ListItem component="label" htmlFor="Note--attachment" button>
               <ListItemIcon color="primary" className={classes.button}>
                 <Icon>attach_file</Icon>
               </ListItemIcon>
-              <Typography
-                component="label"
-                htmlFor="Note--attachment"
-                className={classes.listItemText}
-              >
-                Attach File
+              <Typography className={classes.listItemText}>Attach File</Typography>
+            </ListItem>
+            <ListItem onClick={onCanvasToggle(true)} button>
+              <ListItemIcon color="primary" className={classes.button}>
+                <Icon>gesture</Icon>
+              </ListItemIcon>
+              <Typography component="label" className={classes.listItemText}>
+                Write
               </Typography>
             </ListItem>
           </List>
@@ -236,6 +236,9 @@ export const EditorView = decorate(
               />
             ) : null}
           </div>
+        </Dialog>
+        <Dialog open={showCanvas} onClose={onCanvasToggle(false)}>
+          <NoteHandWriteEditor onSave={onCanvasSave} onClose={onCanvasToggle(false)} />
         </Dialog>
         <input
           type="file"
