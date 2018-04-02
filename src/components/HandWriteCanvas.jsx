@@ -1,5 +1,5 @@
 import React from 'react';
-import { canvasToBlob } from '../utils/promise-helper';
+import { canvasToBlob, fileToUrl } from '../utils/promise-helper';
 
 const setUpForCanvas = () => {
   document.body.style.touchAction = 'none';
@@ -32,6 +32,32 @@ class HandWriteCanvasContainer extends React.Component {
       offsetX: x,
       offsetY: y
     };
+  };
+
+  initializeCanvas = (width, height) => {
+    this.canvasRef.width = width;
+    this.canvasRef.height = height;
+    this.ctx = this.canvasRef.getContext('2d');
+    this.ctx.strokeStyle = '#000';
+    this.ctx.lineWidth = 5;
+    this.ctx.lineJoin = 'round';
+    this.ctx.lineCap = 'round';
+  };
+
+  getDrawImageParams = (cWidth, cHeight, imageWidth, imageHeight) => {
+    if (imageWidth < cWidth) {
+      return [];
+    }
+    const ratio = cWidth / imageWidth;
+    return [cWidth, ratio * imageHeight];
+  };
+
+  getDrawImageCanvasSize = (cWidth, cHeight, imageWidth, imageHeight) => {
+    if (imageWidth < cWidth) {
+      return [imageWidth, imageHeight];
+    }
+    const ratio = cWidth / imageWidth;
+    return [cWidth, ratio * imageHeight];
   };
 
   handleMouseDown = e => {
@@ -75,14 +101,30 @@ class HandWriteCanvasContainer extends React.Component {
   };
 
   componentDidMount() {
+    const { width, height, image } = this.props;
     setUpForCanvas();
-    this.canvasRef.width = window.innerWidth - 50;
-    this.canvasRef.height = window.innerHeight - 100;
-    this.ctx = this.canvasRef.getContext('2d');
-    this.ctx.strokeStyle = '#000';
-    this.ctx.lineWidth = 5;
-    this.ctx.lineJoin = 'round';
-    this.ctx.lineCap = 'round';
+    if (image) {
+      const img = new Image();
+      img.onload = () => {
+        const params = this.getDrawImageParams(
+          width,
+          height,
+          img.naturalWidth,
+          img.naturalHeight
+        );
+        const [cvWidth, cvHeight] = this.getDrawImageCanvasSize(
+          width,
+          height,
+          img.naturalWidth,
+          img.naturalHeight
+        );
+        this.initializeCanvas(cvWidth, cvHeight);
+        this.ctx.drawImage(img, 0, 0, ...params);
+      };
+      img.src = fileToUrl(image);
+    } else {
+      this.initializeCanvas(width, height);
+    }
   }
 
   componentWillUnmount() {

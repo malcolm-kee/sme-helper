@@ -113,6 +113,7 @@ export const EditorView = decorate(
     onContentClick,
     onCanvasToggle,
     onCanvasSave,
+    onEditImage,
     onImageSelected,
     onImageRemove,
     onFileSelected,
@@ -159,17 +160,20 @@ export const EditorView = decorate(
                 images,
                 (acc, image, index) => [
                   ...acc,
-                  <Divider key={`imageDivi-${image.id}`} />,
+                  <Divider key={`imageDivi-${index}`} />,
                   <ListItem
                     button
                     onClick={() => onImageOpen(index)}
-                    key={`imageItem-${image.id}`}
+                    key={`imageItem-${index}`}
                   >
                     <ListItemIcon>
                       <Avatar src={fileToUrl(image)} />
                     </ListItemIcon>
                     <ListItemText primary={image.name} />
                     <ListItemSecondaryAction>
+                      <IconButton onClick={() => onEditImage(index)} color="primary">
+                        <Icon>edit</Icon>
+                      </IconButton>
                       <IconButton onClick={() => onImageRemove(index)} color="primary">
                         <Icon>delete</Icon>
                       </IconButton>
@@ -237,8 +241,16 @@ export const EditorView = decorate(
             ) : null}
           </div>
         </Dialog>
-        <Dialog open={showCanvas} onClose={onCanvasToggle(false)}>
-          <NoteHandWriteEditor onSave={onCanvasSave} onClose={onCanvasToggle(false)} />
+        <Dialog fullScreen open={showCanvas} onClose={onCanvasToggle(false)}>
+          <div>
+            {showCanvas ? (
+              <NoteHandWriteEditor
+                image={images[focusedImage]}
+                onSave={onCanvasSave}
+                onClose={onCanvasToggle(false)}
+              />
+            ) : null}
+          </div>
         </Dialog>
         <input
           type="file"

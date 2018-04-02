@@ -75,6 +75,10 @@ class EditorContainer extends React.Component {
     this.handleToggleCanvas(false)();
   };
 
+  handleEditImage = imageIndex => {
+    this.setState({ focusedImage: imageIndex, showCanvas: true });
+  };
+
   handleFileSelected = ev => {
     const { target } = ev;
     const files = target.files;
@@ -188,6 +192,7 @@ class EditorContainer extends React.Component {
         onClickRoot={this.handleClickRoot}
         onCanvasToggle={this.handleToggleCanvas}
         onCanvasSave={this.handleCanvasSave}
+        onEditImage={this.handleEditImage}
         onInputChange={this.handleInputChange}
         onContentClick={this.handleContentClick}
         onImageSelected={this.handleImageSelected}
