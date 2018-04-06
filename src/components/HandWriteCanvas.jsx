@@ -34,9 +34,11 @@ class HandWriteCanvasContainer extends React.Component {
     };
   };
 
-  initializeCanvas = (width, height) => {
-    this.canvasRef.width = width;
-    this.canvasRef.height = height;
+  initializeCanvas = (width, height, imgWidth, imgHeight) => {
+    this.canvasRef.width = imgWidth;
+    this.canvasRef.height = imgHeight;
+    this.canvasRef.style.width = width;
+    this.canvasRef.style.height = height;
     this.ctx = this.canvasRef.getContext('2d');
     this.ctx.strokeStyle = '#000';
     this.ctx.lineWidth = 5;
@@ -106,20 +108,21 @@ class HandWriteCanvasContainer extends React.Component {
     if (image) {
       const img = new Image();
       img.onload = () => {
-        const params = this.getDrawImageParams(
-          width,
-          height,
-          img.naturalWidth,
-          img.naturalHeight
-        );
+        // const params = this.getDrawImageParams(
+        //   width,
+        //   height,
+        //   img.naturalWidth,
+        //   img.naturalHeight
+        // );
         const [cvWidth, cvHeight] = this.getDrawImageCanvasSize(
           width,
           height,
           img.naturalWidth,
           img.naturalHeight
         );
-        this.initializeCanvas(cvWidth, cvHeight);
-        this.ctx.drawImage(img, 0, 0, ...params);
+        this.initializeCanvas(cvWidth, cvHeight, img.naturalWidth, img.naturalHeight);
+        // this.ctx.drawImage(img, 0, 0, ...params);
+        this.ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
       };
       img.src = fileToUrl(image);
     } else {
