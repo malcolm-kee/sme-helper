@@ -1,6 +1,5 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
-import Avatar from 'material-ui/Avatar';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import Toolbar from 'material-ui/Toolbar';
@@ -38,13 +37,9 @@ const NoteHandWriteEditorView = decorate(
             <IconButton color="inherit" onClick={triggerSave}>
               <Icon>save</Icon>
             </IconButton>
-            <Avatar
-              component="label"
-              htmlFor="canvas-pen-color"
-              style={{ backgroundColor: color, color: '#fff' }}
-            >
+            <IconButton component="label" htmlFor="canvas-pen-color" style={{ color }}>
               <Icon>border_color</Icon>
-            </Avatar>
+            </IconButton>
             <input
               id="canvas-pen-color"
               value={color}

@@ -14,6 +14,7 @@ class HandWriteCanvasContainer extends React.Component {
   ctx = null;
   lastX = 0;
   lastY = 0;
+  scalingFactor = 1;
 
   state = {
     isDrawing: false
@@ -22,11 +23,14 @@ class HandWriteCanvasContainer extends React.Component {
   extractOffSetFromEvent = e => {
     const { offsetX, offsetY, touches } = e.nativeEvent;
     if (offsetX && offsetY) {
-      return { offsetX, offsetY };
+      return {
+        offsetX: offsetX * this.scalingFactor,
+        offsetY: offsetY * this.scalingFactor
+      };
     }
     const rect = this.canvasRef.getBoundingClientRect();
-    const x = touches[0].clientX - rect.left;
-    const y = touches[0].clientY - rect.top;
+    const x = (touches[0].clientX - rect.left) * this.scalingFactor;
+    const y = (touches[0].clientY - rect.top) * this.scalingFactor;
 
     return {
       offsetX: x,
@@ -34,32 +38,46 @@ class HandWriteCanvasContainer extends React.Component {
     };
   };
 
-  initializeCanvas = (width, height, imgWidth, imgHeight) => {
-    this.canvasRef.width = imgWidth;
-    this.canvasRef.height = imgHeight;
-    this.canvasRef.style.width = width;
-    this.canvasRef.style.height = height;
+  initializeCanvas = (width, height, image) => {
+    if (image) {
+      const [cvWidth, cvHeight, scalingRatio] = this.getDrawImageCanvasSize(
+        width,
+        height,
+        image.naturalWidth,
+        image.naturalHeight
+      );
+      this.canvasRef.width = image.naturalWidth;
+      this.canvasRef.height = image.naturalHeight;
+      this.canvasRef.style.width = cvWidth;
+      this.canvasRef.style.height = cvHeight;
+      this.scalingFactor = 1 / scalingRatio;
+      console.log(
+        'image',
+        image.naturalWidth,
+        image.naturalHeight,
+        'canvas',
+        cvWidth,
+        cvHeight,
+        'ratio',
+        this.scalingFactor
+      );
+    } else {
+      this.canvasRef.width = width;
+      this.canvasRef.height = height;
+    }
     this.ctx = this.canvasRef.getContext('2d');
     this.ctx.strokeStyle = '#000';
-    this.ctx.lineWidth = 5;
+    this.ctx.lineWidth = 5 * this.scalingFactor;
     this.ctx.lineJoin = 'round';
     this.ctx.lineCap = 'round';
   };
 
-  getDrawImageParams = (cWidth, cHeight, imageWidth, imageHeight) => {
-    if (imageWidth < cWidth) {
-      return [];
-    }
-    const ratio = cWidth / imageWidth;
-    return [cWidth, ratio * imageHeight];
-  };
-
   getDrawImageCanvasSize = (cWidth, cHeight, imageWidth, imageHeight) => {
-    if (imageWidth < cWidth) {
-      return [imageWidth, imageHeight];
+    if (imageWidth <= cWidth) {
+      return [imageWidth, imageHeight, 1];
     }
-    const ratio = cWidth / imageWidth;
-    return [cWidth, ratio * imageHeight];
+    const scalingRatio = cWidth / imageWidth;
+    return [cWidth, scalingRatio * imageHeight, scalingRatio];
   };
 
   handleMouseDown = e => {
@@ -108,20 +126,7 @@ class HandWriteCanvasContainer extends React.Component {
     if (image) {
       const img = new Image();
       img.onload = () => {
-        // const params = this.getDrawImageParams(
-        //   width,
-        //   height,
-        //   img.naturalWidth,
-        //   img.naturalHeight
-        // );
-        const [cvWidth, cvHeight] = this.getDrawImageCanvasSize(
-          width,
-          height,
-          img.naturalWidth,
-          img.naturalHeight
-        );
-        this.initializeCanvas(cvWidth, cvHeight, img.naturalWidth, img.naturalHeight);
-        // this.ctx.drawImage(img, 0, 0, ...params);
+        this.initializeCanvas(width, height, img);
         this.ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
       };
       img.src = fileToUrl(image);
