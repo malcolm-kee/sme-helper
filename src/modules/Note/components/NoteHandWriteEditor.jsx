@@ -1,11 +1,10 @@
 import React from 'react';
+import { ReactPainter } from 'react-painter';
 import AppBar from 'material-ui/AppBar';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import Toolbar from 'material-ui/Toolbar';
 import { withStyles } from 'material-ui/styles';
-
-import { HandWriteCanvas } from '../../../components/HandWriteCanvas';
 
 const decorate = withStyles(() => ({
   root: {
@@ -89,7 +88,7 @@ class NoteHandWriteEditorContainer extends React.Component {
       );
     };
     return (
-      <HandWriteCanvas
+      <ReactPainter
         onSave={this.handleSave}
         render={renderCanvas}
         color={this.state.color}
